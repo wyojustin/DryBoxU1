@@ -1,7 +1,7 @@
 # DryBoxU1 cut checklist (2026-11-11)
 
 Everything that gets sawn or lasered, in order. Units mm. Lengths come from the `.scad` files
-(`2026-11-03_dry_box_assembly.scad` prints them; copy in [`cut/2026-11-05_cut_list.txt`](cut/2026-11-05_cut_list.txt)).
+(`scad/2026-11-03_dry_box_assembly.scad` prints them; copy in [`cut/2026-11-05_cut_list.txt`](cut/2026-11-05_cut_list.txt)).
 Figures (in the history, commit 774f584): [rip plan](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_rip_plan.png),
 [cut sheets](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_cut_sheets.png), [cut plan with tight spots](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_cut_plan.png).
 

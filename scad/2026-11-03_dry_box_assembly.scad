@@ -61,7 +61,7 @@ for (mx = [0, 1], mz = [0, 1])
     translate([X / 2, 0, Z / 2]) mirror([mx, 0, 0]) mirror([0, 0, mz]) translate([-X / 2, 0, -Z / 2])
         color([0.2, 0.2, 0.22]) translate([t + ext, 0.5, t + ext])
             multmatrix([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0]])
-                import("stl/corner_bracket_qty=4.stl");
+                import("../stl/corner_bracket_qty=4.stl");
 
 // foam seal on the frame face, centered over the frame / acrylic seam
 color([0.25, 0.25, 0.25]) translate([0, -foam, 0]) rotate([90, 0, 0]) mirror([0, 0, 1])
@@ -134,7 +134,7 @@ echo(str("drawer ", dr, " y ", dr_y0, " .. ", dr_y0 + dr[1], "; tunnel outer x "
 for (k = [0 : 1]) {
     fx = hang_x[k];
     color([0.95, 0.55, 0.1]) translate([fx, hang_y, top_in]) rotate([0, 0, 180])
-        import("stl/feeder_insert_qty=2.stl");
+        import("../stl/feeder_insert_qty=2.stl");
     translate([fx, face_y, top_in]) {
         color([0.15, 0.15, 0.17]) translate([-fd[0] / 2, -black_l, -fd[2]]) cube([fd[0], black_l, fd[2]]);
         color("white") translate([-fd[0] / 2, -fd[1], -fd[2]]) cube([fd[0], fd[1] - black_l, fd[2]]);

@@ -114,20 +114,21 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 
 | File | What |
 |---|---|
-| [`2026-11-03_dry_box_assembly.scad`](2026-11-03_dry_box_assembly.scad) | The whole box, for viewing (toggles: lid, door angle, spools, cart frame); prints the cut list |
-| [`2026-10-30_dry_box_panels.scad`](2026-10-30_dry_box_panels.scad) | Shell: dimensions, finger joints, every hole; panel outlines for the laser |
-| [`2026-10-30_dry_box_sheets.scad`](2026-10-30_dry_box_sheets.scad) | Shell panels nested on the ripped strips |
-| [`2026-11-05_interior.scad`](2026-11-05_interior.scad) | Tunnel, deck and holder plates nested on the interior sheet; feeder gaskets |
-| [`2026-11-04_spool_holder.scad`](2026-11-04_spool_holder.scad) | Spool holders, rollers, washers, rod end caps |
-| [`2026-11-04_door_mounts.scad`](2026-11-04_door_mounts.scad) | Hinge loop, seal adjusters, ring, bar and caps; door catch; handle |
-| [`2026-11-03_swing_latch.scad`](2026-11-03_swing_latch.scad) | Latch saddle and barrel |
-| [`2026-11-02_feeder_insert.scad`](2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
-| [`2026-10-31_dry_box_bracket.scad`](2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
+| [`2026-11-03_dry_box_assembly.scad`](scad/2026-11-03_dry_box_assembly.scad) | The whole box, for viewing (toggles: lid, door angle, spools, cart frame); prints the cut list |
+| [`2026-10-30_dry_box_panels.scad`](scad/2026-10-30_dry_box_panels.scad) | Shell: dimensions, finger joints, every hole; panel outlines for the laser |
+| [`2026-10-30_dry_box_sheets.scad`](scad/2026-10-30_dry_box_sheets.scad) | Shell panels nested on the ripped strips |
+| [`2026-11-05_interior.scad`](scad/2026-11-05_interior.scad) | Tunnel, deck and holder plates nested on the interior sheet; feeder gaskets |
+| [`2026-11-04_spool_holder.scad`](scad/2026-11-04_spool_holder.scad) | Spool holders, rollers, washers, rod end caps |
+| [`2026-11-04_door_mounts.scad`](scad/2026-11-04_door_mounts.scad) | Hinge loop, seal adjusters, ring, bar and caps; door catch; handle |
+| [`2026-11-03_swing_latch.scad`](scad/2026-11-03_swing_latch.scad) | Latch saddle and barrel |
+| [`2026-11-02_feeder_insert.scad`](scad/2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
+| [`2026-10-31_dry_box_bracket.scad`](scad/2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
 | [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md) | Fasteners, bought parts, printed parts |
 | [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md) | Every saw and laser cut, in order: acrylic rips, laser strips, rods, 1010 |
 
-The other `.scad` files are concepts, gauges, fit tests and views from along the way, kept for the
-record; superseded ones say so in their headers.
+All `.scad` files live in [`scad/`](scad/); open them from there (the assembly imports STLs from
+`../stl/`). The other `.scad` files are concepts, gauges, fit tests and views from along the way, kept
+for the record; superseded ones say so in their headers.
 
 - [`cut/`](cut/): laser files (SVG) exactly as staged for cutting, plus the cut list.
 - [`stl/`](stl/): the current printed parts only, one file per part, quantity in the name. Fit tests

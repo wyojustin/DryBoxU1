@@ -10,4 +10,4 @@ use <2026-10-30_dry_box_panels.scad>
 color([0.75, 0.85, 1.0]) render() panel3d("top");
 for (x = hang_x)
     color([0.95, 0.55, 0.1]) translate([x, hang_y, Z - t]) rotate([0, 0, 180])
-        import("stl/feeder_insert_qty=2.stl");
+        import("../stl/feeder_insert_qty=2.stl");
