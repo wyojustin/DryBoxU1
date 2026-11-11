@@ -33,11 +33,11 @@ Job origin at the strip corner, factory edge on y = 0. Kerf 0.25 is built into t
 
 | | Strip | File | Parts |
 |---|---|---|---|
-| [ ] | 1 | [`cut/2026-10-30_dry_box_strip1.svg`](cut/2026-10-30_dry_box_strip1.svg) | top + left |
-| [ ] | 2 | [`cut/2026-10-30_dry_box_strip2.svg`](cut/2026-10-30_dry_box_strip2.svg) | bottom + right |
-| [ ] | 3 | [`cut/2026-10-30_dry_box_strip3.svg`](cut/2026-10-30_dry_box_strip3.svg) | back (gland hole 19.8) |
-| [ ] | 4 | [`cut/2026-10-30_dry_box_strip4.svg`](cut/2026-10-30_dry_box_strip4.svg) | door |
-| [ ] | EVA | [`cut/2026-11-05_feeder_gasket.svg`](cut/2026-11-05_feeder_gasket.svg) | 2 feeder gaskets |
+| [ ] | 1 | [`cut/strip1_top_left_qty=1.svg`](cut/strip1_top_left_qty=1.svg) | top + left |
+| [ ] | 2 | [`cut/strip2_bottom_right_qty=1.svg`](cut/strip2_bottom_right_qty=1.svg) | bottom + right |
+| [ ] | 3 | [`cut/strip3_back_qty=1.svg`](cut/strip3_back_qty=1.svg) | back (gland hole 19.8) |
+| [ ] | 4 | [`cut/strip4_door_qty=1.svg`](cut/strip4_door_qty=1.svg) | door |
+| [ ] | EVA | [`cut/feeder_gasket_pair_qty=1.svg`](cut/feeder_gasket_pair_qty=1.svg) | 2 feeder gaskets |
 
 Tight spots: strips 1 and 2 leave 4.25 at each end of the 910; the frame screw holes leave about
 3.1 of acrylic to the front edge. Optional first: one gasket and a holder plate as a test cut.
