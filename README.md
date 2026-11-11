@@ -13,7 +13,7 @@ anything gets cut.
 > Waiting on the desiccant pan to arrive so the tunnel can be sized to it. Renders show the pan at
 > its assumed size.
 
-![The dry box in the cart's middle bay, door closed](renders/2026-11-07_readme_closed.png)
+![The dry box in the cart's middle bay, door closed](images/2026-11-07_readme_closed.png)
 
 ## What it does
 
@@ -33,7 +33,7 @@ The door hinges along its **bottom** edge on an 8 mm steel bar and swings down o
 resting open by gravity (no prop). Everything inside is in reach: the four feeding spools on their
 rollers, the stacked spares, and the desiccant pan's handle right at the front.
 
-![Door swung down](renders/2026-11-07_readme_open.png)
+![Door swung down](images/2026-11-07_readme_open.png)
 
 ### From above (lid off)
 
@@ -42,7 +42,7 @@ Left and right: two laser-cut spool holders, each spinning a pair of spools on p
 spare spools stacked on a perforated acrylic deck, with the desiccant tunnel underneath. Dry air
 reaches the spools through the deck holes and the vents along the tunnel walls.
 
-![Inside, from above](renders/2026-11-07_readme_inside.png)
+![Inside, from above](images/2026-11-07_readme_inside.png)
 
 ### From the back
 
@@ -50,7 +50,7 @@ The U1's two feeders hang on printed inserts in the top panel, with their outlet
 the back wall. A PG13.5 cable gland in the back panel stays closed on a rod stub, ready if a heater
 is ever needed. Two more spares tuck into the floor corners under the spinning spools.
 
-![From the back](renders/2026-11-07_readme_back.png)
+![From the back](images/2026-11-07_readme_back.png)
 
 ## The interesting bits
 
@@ -62,7 +62,7 @@ for the bar and two M3 grub screws bearing on it through captured nuts: turn the
 moves back, pulling the door's bottom edge into the EVA foam seal (0.5 mm per turn, 3 mm of travel).
 The rings are full circles with crush ribs, so the hinge glides without play.
 
-![Bottom hinge: loop, bar, ring](renders/2026-11-07_readme_hinge.png)
+![Bottom hinge: loop, bar, ring](images/2026-11-07_readme_hinge.png)
 
 ### Swing-bolt latches
 
@@ -72,7 +72,7 @@ and swing the bolt back to open.
 
 | Latched | Released |
 |---|---|
-| ![Latch closed](renders/2026-11-07_readme_latch_closed.png) | ![Latch open](renders/2026-11-07_readme_latch_open.png) |
+| ![Latch closed](images/2026-11-07_readme_latch_closed.png) | ![Latch open](images/2026-11-07_readme_latch_open.png) |
 
 ### Spool holders
 
@@ -83,7 +83,7 @@ holder spins two spools independently. Push-on printed end caps (three crush rib
 prints to 7.8 mm) keep the rods in; each rod bottoms in its caps before a cap reaches the acrylic.
 The two holders are the same part, one turned end for end, and they simply sit on the floor.
 
-![Spool holder](renders/2026-11-11_holder_tall_strips.png)
+![Spool holder](images/2026-11-11_holder_tall_strips.png)
 
 ### Fits are measured, not guessed
 
@@ -132,7 +132,8 @@ record; superseded ones say so in their headers.
 - [`cut/`](cut/): laser files (SVG) exactly as staged for cutting, plus the cut list.
 - [`stl/`](stl/): the current printed parts only, one file per part, quantity in the name. Fit tests
   and superseded versions are in the git history. The assembly imports a few of them.
-- [`renders/`](renders/) and the dated PNGs in the top folder: a visual log of the design.
+- [`images/`](images/): the pictures in this README. Earlier renders (the design's visual log) are in
+  the git history.
 
 ## Before cutting
 

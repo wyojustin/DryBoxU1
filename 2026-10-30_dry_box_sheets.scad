@@ -1,6 +1,6 @@
 // 2026-10-30: dry box panels nested on strips ripped from 603 x 910 cast acrylic sheets (measured
 // 2026-11-09). The xTool P3 takes stock up to 530 wide (work area 915 x 458), so the sheets are ripped
-// by hand with a circular saw (renders/2026-11-11_rip_plan.png): sheet A in the middle (two ~300.6
+// by hand with a circular saw (rip plan render: commit 774f584, renders/2026-11-11_rip_plan.png): sheet A in the middle (two ~300.6
 // strips: back, door), sheets B and C at 450 from a factory edge (one 450 x 910 strip each, for the
 // 430-deep shell; 151 offcuts kept).
 // strip = 1: top + left (450 strip), 2: bottom + right (450 strip),
