@@ -27,7 +27,7 @@ panels file: into a T-nut, screw length <= part thickness + 3.0.
 | Item | Qty | Note |
 |---|---|---|
 | 608ZZ bearing | 16 | 2 per roller, 8 rollers |
-| 3M 4910 VHB, 0.5 in x 5 yd | 1 roll | about 2.6 m: door frame, floor rail |
+| 3M 4910 VHB, 0.5 in x 5 yd | 1 roll | door frame (about 1.8 m) |
 | EVA foam tape, 1/2 x 1/8 in | about 2 m | door seal, plus feeder outlet rings |
 | Neutral-cure RTV | 1 | |
 | PG13.5 cable gland | 1 | monochef assortment; closed on an 8 mm rod stub until a heater needs it |
@@ -36,17 +36,20 @@ panels file: into a T-nut, screw length <= part thickness + 3.0.
 
 ## Printed parts
 
-| Part | Qty | File |
-|---|---|---|
-| Saddle | 2 | stl/2026-11-03_swing_latch_saddle.stl |
-| Barrel | 2 | stl/2026-11-05_latch_barrel.stl |
-| Catch | 2 | stl/2026-11-04_door_catch.stl |
-| Loop | 2 | stl/2026-11-04_door_loop.stl |
-| Hinge ring | 2 | stl/2026-11-04_door_hook.stl |
-| Handle | 1 | stl/2026-11-05_door_handle.stl |
-| Bar end cap | 2 | stl/2026-11-04_bar_end_cap.stl |
-| Rod end cap | 8 | stl/2026-11-04_rod_end_cap.stl |
-| Corner bracket | 4 | stl/2026-10-31_dry_box_bracket.stl |
-| Feeder insert v11 | 2 | stl/2026-11-03_feeder_insert_v11.stl |
-| Roller, 79.6 long | 8 | stl/2026-11-05_roller.stl |
-| Washer, 1 mm | 16 | stl/2026-11-05_roller_washer.stl |
+File names carry the quantity per box: `<part>_qty=<n>.stl`. Each file was checked on 2026-11-11 against a
+fresh export from its `.scad` source (same volume and size).
+
+| Part | Qty | File | Source (`part`) |
+|---|---|---|---|
+| Latch saddle (v10) | 2 | [stl/latch_saddle_qty=2.stl](stl/latch_saddle_qty=2.stl) | swing_latch `saddle` |
+| Latch barrel | 2 | [stl/latch_barrel_qty=2.stl](stl/latch_barrel_qty=2.stl) | swing_latch `barrel` |
+| Door catch | 2 | [stl/door_catch_qty=2.stl](stl/door_catch_qty=2.stl) | door_mounts `catch_print` |
+| Hinge loop | 2 | [stl/hinge_loop_qty=2.stl](stl/hinge_loop_qty=2.stl) | door_mounts `keeper` |
+| Hinge ring | 2 | [stl/hinge_ring_qty=2.stl](stl/hinge_ring_qty=2.stl) | door_mounts `hook` |
+| Door handle | 1 | [stl/door_handle_qty=1.stl](stl/door_handle_qty=1.stl) | door_mounts `handle` |
+| Bar end cap | 2 | [stl/bar_end_cap_qty=2.stl](stl/bar_end_cap_qty=2.stl) | door_mounts `bar_cap` |
+| Rod end cap | 8 | [stl/rod_end_cap_qty=8.stl](stl/rod_end_cap_qty=8.stl) | spool_holder `cap` |
+| Roller, 79.6 long | 8 | [stl/roller_qty=8.stl](stl/roller_qty=8.stl) | spool_holder `roller` |
+| Roller washer, 1 mm | 16 | [stl/roller_washer_qty=16.stl](stl/roller_washer_qty=16.stl) | spool_holder `washer` |
+| Corner bracket | 4 | [stl/corner_bracket_qty=4.stl](stl/corner_bracket_qty=4.stl) | dry_box_bracket |
+| Feeder insert (v11) | 2 | [stl/feeder_insert_qty=2.stl](stl/feeder_insert_qty=2.stl) | feeder_insert |

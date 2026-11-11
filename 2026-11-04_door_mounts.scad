@@ -32,7 +32,7 @@ mount_x = [X / 4, 3 * X / 4];
 // back wall and the top panel, behind the 1010 member, into washers and nylock nuts inside the
 // box. It carries an 8 mm steel bar along x in a short y-slot. The bar is oily and slid out of
 // a plain bore in the test print, so it is ONE bar from loop to loop (cut from a spare 400 rod:
-// 320 between the loops + 47 + 2 x 6 = 379) with a large push-on end cap at each end, against
+// 320 between the loops + 47 + 2 x 6 = 379; 2026-11-11: 2 x 7 = 381, bottoms in the caps) with a large push-on end cap at each end, against
 // the outer face of each loop (Justin, 2026-11-04).
 // Top seal adjuster: per cheek, an M3 x 10 grub screw from the loop's front face (1.5 mm hex
 // key) runs through a captured nut (dropped in from the top) and bears on the bar's front.
@@ -100,7 +100,12 @@ module keeper() {   // the loop: a U (two cheeks joined at the back), printed ba
 }
 bcap_d = 18; bcap_t = 7; bcap_in = 6;   // bar end cap: disc 18 x 7, 6 mm blind bore with crush ribs
 bcap_bore = 8.6; bcap_rib = 0.4;         // ribs at 7.8 nominal, as the spool-holder caps
-bar_x  = [mount_x[0] - lp[0] / 2 - bcap_in, mount_x[1] + lp[0] / 2 + bcap_in];   // bar ends (box x)
+bcap_lead = 10.6;                        // lead-in mouth diameter
+// 2026-11-11: the bar BOTTOMS in each cap before the cap reaches the loop (Justin: solid stop on the
+// bar). 381 nominal, saw +-1: 6.5 to 7.5 past each loop face in a 6 bore, cap 0.5 to 1.5 off the loop.
+bar_in = 7;
+bcap_off = bar_in - bcap_in;             // cap stand-off from the loop, nominal 1
+bar_x  = [mount_x[0] - lp[0] / 2 - bar_in, mount_x[1] + lp[0] / 2 + bar_in];   // bar ends (box x)
 function bar_len() = bar_x[1] - bar_x[0];   // for the assembly's cut list
 module bar_cap() {   // printed open end down, no supports
     difference() {
@@ -112,6 +117,9 @@ module bar_cap() {   // printed open end down, no supports
             cylinder(d = bcap_bore, h = bcap_in + 1, $fn = 48);
             for (a = [0, 120, 240]) rotate(a) translate([bcap_bore / 2 - bcap_rib, -0.6, 0]) cube([1, 1.2, bcap_in + 1]);
         }
+        // 2026-11-09: 45 deg lead-in at the mouth (test print: fit good, hard to align): 10.6 down to
+        // the rib tips (7.8) over 1.4, so the ribs start tapered. Overhang 45 deg, prints fine open end down.
+        translate([0, 0, -0.01]) cylinder(d1 = bcap_lead, d2 = bcap_bore - 2 * bcap_rib, h = (bcap_lead - bcap_bore + 2 * bcap_rib) / 2, $fn = 48);
     }
 }
 module adjusters() for (m = [-1, 1]) color([0.15, 0.15, 0.17]) translate([m * adj_x, bar_yz[0] - bar_d / 2 - grub_l, bar_yz[1]])
@@ -120,8 +128,8 @@ module bar() {   // in box x: the one bar through both loops, with its two end c
     color([0.55, 0.55, 0.58]) translate([bar_x[0], bar_yz[0], bar_yz[1]]) rotate([0, 90, 0])
         cylinder(d = bar_d, h = bar_x[1] - bar_x[0], $fn = 32);
     color([0.95, 0.55, 0.1]) {
-        translate([mount_x[0] - lp[0] / 2, bar_yz[0], bar_yz[1]]) rotate([0, -90, 0]) bar_cap();
-        translate([mount_x[1] + lp[0] / 2, bar_yz[0], bar_yz[1]]) rotate([0, 90, 0]) bar_cap();
+        translate([mount_x[0] - lp[0] / 2 - bcap_off, bar_yz[0], bar_yz[1]]) rotate([0, -90, 0]) bar_cap();
+        translate([mount_x[1] + lp[0] / 2 + bcap_off, bar_yz[0], bar_yz[1]]) rotate([0, 90, 0]) bar_cap();
     }
 }
 
@@ -157,7 +165,7 @@ module under(lx) translate([lx, 0, 0]) mirror([0, 0, 1]) translate([0, 0, -Z]) c
 piv_y = 12; piv_z = -(272 - Z);       // pivot under the box: y 12, z -14
 ct      = [30, ext, 22];              // catch x, y (= door frame depth), z (stands off the frame)
 ct_leg  = 3;                          // leg down the frame's outer face: the knob bears on it
-ct_r    = 4;                          // free corner rounded
+ct_r    = 4;                          // both free corners rounded
 slot_w  = 5.6;
 module catch_side2d() difference() {   // in (y, z): block on the frame's end face, leg wrapped round its outer face
     translate([df_y[0] - ct_leg, -ct[2]]) square([ext + ct_leg, ct[2] + ext]);
@@ -165,6 +173,10 @@ module catch_side2d() difference() {   // in (y, z): block on the frame's end fa
     difference() {                                                                   // free corner
         translate([df_y[0] - ct_leg - 1, -ct[2] - 1]) square([ct_r + 1, ct_r + 1]);
         translate([df_y[0] - ct_leg + ct_r, -ct[2] + ct_r]) circle(r = ct_r, $fn = 48);
+    }
+    difference() {                                                                   // 2026-11-09: box-side corner too
+        translate([df_y[0] + ext - ct_r, -ct[2] - 1]) square([ct_r + 1, ct_r + 1]);   // (faces the saddle's rounded edge; cosmetic)
+        translate([df_y[0] + ext - ct_r, -ct[2] + ct_r]) circle(r = ct_r, $fn = 48);
     }
 }
 module catch_part() {   // printed knob face down (catch_print), so the U-slot is vertical. The knob's pull tips the catch

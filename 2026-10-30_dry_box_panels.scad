@@ -69,7 +69,7 @@ hang_r   = 3;
 // tubes can be released from outside. One port per feeder spanning both collets. The feeder's
 // two case screws are replaced by 2.8 x 35-40 self-tappers driven from behind through
 // screw_d2 holes, clamping feeder and seal to the wall.
-cord_d   = 20.8;                 // heater cord hole, back panel: PG13.5 gland, 20.6 thread
+cord_d   = 19.8;                 // heater cord hole, back panel: PG13.5 gland, thread 19.6 measured 2026-11-08
 cord_xz  = [110, 130];
 port_dx  = 26;                   // collet centers (measured)
 port_d   = 16;                   // port width: collet ring 10 + 3 each side for fingers / a tool
@@ -88,7 +88,7 @@ SLAB = [
 ];
 // joints: [owner of even segments, owner of odd segments, axis, a0, a1]
 // the bar is the overlap of the two slabs, limited to [a0, a1) along the axis;
-// the back corner cubes are excluded from the bars and belong to bottom and top
+// the back corner cubes are excluded from the bars and belong to the back (CORNER)
 JOINT = [
     ["left",  "bottom", 1, 0, Y - t],
     ["right", "bottom", 1, 0, Y - t],
@@ -99,11 +99,14 @@ JOINT = [
     ["back",  "left",   2, t, Z - t],
     ["back",  "right",  2, t, Z - t],
 ];
+// 2026-11-11: the back owns all 4 back corner cubes. Owned by top/bottom, each cube hung on a 0.25
+// diagonal pinch (both neighbouring finger segments belong to other panels) and would fall out.
+// The back owns the end segment of both joints meeting each corner, so the cube joins it solidly.
 CORNER = [  // [owner, cube]
-    ["bottom", [[0, t],     [Y - t, Y], [0, t]]],
-    ["bottom", [[X - t, X], [Y - t, Y], [0, t]]],
-    ["top",    [[0, t],     [Y - t, Y], [Z - t, Z]]],
-    ["top",    [[X - t, X], [Y - t, Y], [Z - t, Z]]],
+    ["back", [[0, t],     [Y - t, Y], [0, t]]],
+    ["back", [[X - t, X], [Y - t, Y], [0, t]]],
+    ["back", [[0, t],     [Y - t, Y], [Z - t, Z]]],
+    ["back", [[X - t, X], [Y - t, Y], [Z - t, Z]]],
 ];
 
 function slab(name)  = SLAB[search([name], SLAB)[0]][1];

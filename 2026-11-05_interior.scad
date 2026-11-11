@@ -78,7 +78,7 @@ module sheet() {
     for (i = [0 : 1]) translate([c2 + i * (wall_h + g) + wall_h, m + dr[1] + g]) rotate(90) cut() wall2d();
     translate([c2, m + dr[1] + tun_l + 2 * g]) cut() tray_end2d(true);
     translate([c2, m + dr[1] + tun_l + 2 * g + 50]) cut() strip2d();
-    for (i = [0 : 5]) translate([c3 + 85, m + i * 56]) cut() plate2d();
+    for (i = [0 : 5]) translate([c3 + 85, m + i * 56]) cut() plate2d(i < 4);   // 4 outer, 2 middle (nest stale: re-nest with the pan)
     translate([c3, m + 336]) cut() tray_end2d();
     for (i = [0 : 1]) translate([c3 + i * 50 + 44.2, m + 386]) rotate(90) cut() tray_side2d();
 }

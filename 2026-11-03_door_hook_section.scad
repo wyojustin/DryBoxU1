@@ -8,4 +8,5 @@ color([0.75, 0.76, 0.78]) translate([0, 20, t]) cube([w, ext, ext]);            
 color([0.25, 0.25, 0.25]) translate([0, -foam, 0.5]) cube([w, foam, 14]);              // foam
 color([0.85, 0.92, 1.0]) translate([0, -foam - t, 0]) cube([w, t, 70]);                // door acrylic
 color([0.75, 0.76, 0.78]) translate([0, -foam - t - ext, 0]) cube([w, ext, ext]);      // door frame, bottom
-color([0.2, 0.2, 0.22]) import("stl/2026-11-03_door_hook.stl");
+// 2026-11-11: stl/2026-11-03_door_hook.stl (superseded hook) removed from stl/; it is in git history (e8c96ab).
+// color([0.2, 0.2, 0.22]) import("stl/2026-11-03_door_hook.stl");

@@ -2,14 +2,12 @@ CUT | 1010 | shell frame, horizontal | 2 x 628.4
 CUT | 1010 | shell frame, vertical | 2 x 226.4
 CUT | 1010 | door frame, top and bottom | 2 x 640
 CUT | 1010 | door frame, sides | 2 x 238
-CUT | 1010 | floor rail, outer pieces | 2 x 131.7
-CUT | 1010 | floor rail, inner pieces | 2 x 34.7
-CUT | 8 mm rod | door bar | 1 x 379
-CUT | 8 mm rod | holder rods | 4 x 181.4
+CUT | 8 mm rod | door bar | 1 x 381
+CUT | 8 mm rod | holder rods | 4 x 189
 CUT | acrylic | tunnel floor | 1 x 205.6 x 413.7
 CUT | acrylic | tunnel walls | 2 x 75 x 413.7
 CUT | acrylic | tunnel deck | 1 x 205.6 x 423.2
 CUT | acrylic | tray bottom | 1 x 190 x 400
 CUT | acrylic | tray sides | 2 x 400 x 44.2
 CUT | acrylic | tray ends | 2 x 178.4 x 44.2
-TOTAL | 1010 3798.4 mm
+TOTAL | 1010 3465.6 mm

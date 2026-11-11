@@ -76,12 +76,14 @@ and swing the bolt back to open.
 
 ### Spool holders
 
-Three acrylic plates and two base strips, interlocked egg-crate style and solvent-cemented. Two
+Three acrylic plates and two 35 mm base strips at the plate ends, solvent-cemented: the strips' end
+tabs sit in open-ended slots in the outer plates, and a half-lap joins them to the middle plate. Two
 8 mm rods run through all three plates; each rod carries two printed rollers on 608 bearings, so one
 holder spins two spools independently. Push-on printed end caps (three crush ribs, tuned by test
-prints to 7.8 mm) keep the rods in. The two holders are the same part, one turned end for end.
+prints to 7.8 mm) keep the rods in; each rod bottoms in its caps before a cap reaches the acrylic.
+The two holders are the same part, one turned end for end, and they simply sit on the floor.
 
-![Spool holder](renders/2026-11-07_readme_holder.png)
+![Spool holder](renders/2026-11-11_holder_tall_strips.png)
 
 ### Fits are measured, not guessed
 
@@ -102,7 +104,8 @@ interior (tunnel, deck, holder plates) nests on the fourth. Film comes off befor
 
 **Printed:** hinge loops and rings, latch saddles, barrels and catches, the door handle, corner
 brackets (used to hold the door frame square while the VHB cures, then moved to the shell frame),
-feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/).
+feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
+with the count per box.
 
 ## Files
 
@@ -121,23 +124,23 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-11-02_feeder_insert.scad`](2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
 | [`2026-10-31_dry_box_bracket.scad`](2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
 | [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md) | Fasteners, bought parts, printed parts |
+| [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md) | Every saw and laser cut, in order: acrylic rips, laser strips, rods, 1010 |
 
 The other `.scad` files are concepts, gauges, fit tests and views from along the way, kept for the
 record; superseded ones say so in their headers.
 
 - [`cut/`](cut/): laser files (SVG) exactly as staged for cutting, plus the cut list.
-- [`stl/`](stl/): printed parts, including the fit tests. The assembly imports a few of them.
+- [`stl/`](stl/): the current printed parts only, one file per part, quantity in the name. Fit tests
+  and superseded versions are in the git history. The assembly imports a few of them.
 - [`renders/`](renders/) and the dated PNGs in the top folder: a visual log of the design.
 
 ## Before cutting
 
-Nothing gets cut until every design choice is closed ("you can't uncut"). Still open:
+Nothing gets cut until every design choice is closed ("you can't uncut"). The shell, rods and 1010 are
+closed: see [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md). Still open:
 
-- Measure the desiccant pan, then narrow the tunnel to it and drop the acrylic tray from the
-  interior sheet.
-- Fix the top and bottom panels' back corners: the corner cubes there are joined by a 0.25 mm
-  pinch and would fall out, so they move to the back panel.
-- Measure the PG13.5 gland thread for the back panel hole.
+- Measure the desiccant pan, then narrow the tunnel to it, drop the acrylic tray and re-nest the
+  interior sheet (tunnel, deck, holder plates and strips) on strips the laser takes.
 - Test-cut a feeder gasket and one holder plate.
 
 ## Why not just buy one?

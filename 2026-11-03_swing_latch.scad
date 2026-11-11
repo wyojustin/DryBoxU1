@@ -24,6 +24,9 @@
 // v9 (2026-11-05): 1010 T-nuts are 9.3 long, too long for the 6.4 spacing at y = 5, so the screws
 // move behind the barrel, clear of the 1010, into nylocks like the door loop. That also puts
 // them on the side that resists the knob's pull: a 16 mm lever from the saddle's front edge, not 4.
+// v10 (2026-11-08): tail pocket back to r 12 (v9 print: knob clearance was reduced). Pivot stays
+// at 272 (floor under the pocket 2). The pocket breaks 1 mm through the front and back faces in
+// the 6.4 screw slot; the 2 M3 screws behind the barrel carry the thin back section.
 // v8 (2026-11-05): the back shortened so the saddle is symmetric about the barrel (22 deep).
 // v7 (2026-11-05): the 10 mm printed barrel broke going in (0.2 mm walls beside the nut), so the
 // barrel is 12 across: 1.3 mm walls, 3.4 behind the nut. Saddle bore, mouth and height follow
@@ -41,8 +44,8 @@ door_y0 = -foam - t;               // door outer face
 dframe  = ext;                     // outside 1010 door frame
 cyl_d   = 12;  cyl_len = 20;      // printed barrel with an M5 nut
 cyl_y   = 12;                      // pivot axis, behind the front edge
-tail_r  = 10;                      // v4: swept radius of the screw's tail; v8: 10, with the shorter back
-floor_t = 4;                       // saddle floor under that pocket (with tail_r, pivot stays at 272)
+tail_r  = 12;                      // v4: swept radius of the screw's tail; v10: back to 12 (v8's 10 pinched the knob)
+floor_t = 2;                       // saddle floor under that pocket (with tail_r, pivot stays at 272)
 pivot_z = Z + floor_t + tail_r;    // 272
 sad_y0  = 1;                       // saddle front edge, just behind the shell's front face
 sad     = [47, 2 * (cyl_y - sad_y0), pivot_z + cyl_d / 2 - Z];   // saddle x, y (v8: symmetric about the barrel), z

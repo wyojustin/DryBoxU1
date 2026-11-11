@@ -3,7 +3,7 @@
 // foam door seal, door (open or closed) hung on top hooks and pulled in by bottom swing-bolt latches,
 // 2 laser-cut 2-spool holders (one per side wall) with the desiccant drawer and spares between
 // them, the 2 U1 feeders on their inserts with outlet seals, tubes, case screws and ribbon
-// cables, split floor rail and a floor desiccant drawer in a tunnel under a perforated deck.
+// cables, and a floor desiccant drawer in a tunnel under a perforated deck.
 // Placeholders: feeder bodies (blocks, depth 55 guessed), tray, spools.
 // Toggles below. Units mm; x = width, y = depth (y = 0 is the shell's front edge), z = up.
 
@@ -28,16 +28,15 @@ top_in  = Z - t;
 back_in = Y - t;
 
 // spool holders (holder file geometry: x from the holder's outer plate face, y = 0 on the
-// spool axes, z from the floor). A full-width 1010 floor rail 10 mm behind the frame's inner
-// face is the front stop; the holders' plates start right behind it.
+// spool axes, z from the floor). No floor rail (dropped 2026-11-11, Justin: unnecessary); the
+// holders just sit on the floor, plates 23 .. 207 deep.
 ta = 5.8; gap = 82; cap_t = 4; roll_off = 65; roll_z = 20; roll_od = 28;
 hW = 3 * ta + 2 * gap;                 // holder width (181.4)
-rail_y0  = ext + 10;                   // floor rail's front face
-spool_y  = rail_y0 + ext + 85;         // spool axis depth, 115
+spool_y  = 115;                        // spool axis depth
 function axis_z(d) = roll_z + sqrt(pow(d / 2 + roll_od / 2, 2) - pow(roll_off, 2));
 function slot_x(k) = ta + gap / 2 + k * (ta + gap);
 spool_d = 210; spool_w = 65;
-hold_x  = [t + 0.5 + cap_t, X - t - 0.5 - cap_t];        // left holder origin; right holder origin (turned 180)
+hold_x  = [t + holder_wall_off(), X - t - holder_wall_off()];   // left holder origin; right holder origin (turned 180)
 fed_x   = [hold_x[0] + slot_x(0), hold_x[0] + slot_x(1), hold_x[1] - slot_x(1), hold_x[1] - slot_x(0)];
 
 // feeders
@@ -62,7 +61,7 @@ for (mx = [0, 1], mz = [0, 1])
     translate([X / 2, 0, Z / 2]) mirror([mx, 0, 0]) mirror([0, 0, mz]) translate([-X / 2, 0, -Z / 2])
         color([0.2, 0.2, 0.22]) translate([t + ext, 0.5, t + ext])
             multmatrix([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0]])
-                import("stl/2026-10-31_dry_box_bracket.stl");
+                import("stl/corner_bracket_qty=4.stl");
 
 // foam seal on the frame face, centered over the frame / acrylic seam
 color([0.25, 0.25, 0.25]) translate([0, -foam, 0]) rotate([90, 0, 0]) mirror([0, 0, 1])
@@ -81,7 +80,7 @@ for (k = [0 : 1]) translate([hold_x[k], spool_y, t]) rotate([0, 0, k * 180]) {
 // self-contained acrylic tunnel (floor sheet, 2 walls, perforated deck; nothing bonded to the box,
 // no top mounts). The floor sheet raises the tray 5.8 and the air gap above it lets it lift the
 // other 4.2 over the front frame member on the way out. The deck carries the
-// spares, 2 stacks of 2, flat. The front floor rail is split so the tray passes between.
+// spares, 2 stacks of 2, flat.
 dr      = int_dr(); dr_air = int_air();                 // tray x, y, z; air gap above it
 tn      = int_tun();
 dr_x0   = X / 2 - dr[0] / 2; dr_y0 = back_in - 4 - dr[1];
@@ -125,15 +124,9 @@ store_x = [(t + tun_x[0]) / 2, (tun_x[1] + t + X - t) / 2];
 if (show_spools) for (x = store_x) color("burlywood") translate([x, stack_y[0], t + spool_w / 2])
     difference() { cylinder(d = spool_d, h = spool_w, center = true, $fn = 96); cylinder(d = 55, h = spool_w + 2, center = true, $fn = 48); }
 
-// front floor rail: 1010, 4 pieces, VHB to the floor: each side, wall to the loop's nuts and on to
-// the tunnel, leaving the nuts (x +-15 of the mount, y 32) clear; still stops every holder plate
-rail_x = [[t + 0.5, X / 4 - 22], [X / 4 + 22, tun_x[0] - 0.5],
-          [tun_x[1] + t + 0.5, 3 * X / 4 - 22], [3 * X / 4 + 22, X - t - 0.5]];
-color([0.75, 0.76, 0.78]) for (x = rail_x)
-    translate([x[0], rail_y0, t]) cube([x[1] - x[0], ext, ext]);
 echo(str("drawer ", dr, " y ", dr_y0, " .. ", dr_y0 + dr[1], "; tunnel outer x ", tun_x[0], " .. ", tun_x[1] + t,
          "; deck top z ", deck_z + t, "; stack top z ", deck_z + t + 2 * spool_w + 0.5, " (top inside ", top_in, "); front stack front y ", stack_y[1] - spool_d / 2,
-         "; holders end x ", hold_x[0] + hW + cap_t,
+         "; holders end x ", hold_x[0] + hW + holder_wall_off() - 1,   // outer plate + cap stand-off + cap
          "; storage gap ", tun_x[0] - t, ", front y ", stack_y[0] - spool_d / 2,
          ", spinning spool rear at its top ", spool_y + sqrt(pow(spool_d / 2, 2) - pow(t + axis_z(spool_d) - t - spool_w, 2))));
 
@@ -141,7 +134,7 @@ echo(str("drawer ", dr, " y ", dr_y0, " .. ", dr_y0 + dr[1], "; tunnel outer x "
 for (k = [0 : 1]) {
     fx = hang_x[k];
     color([0.95, 0.55, 0.1]) translate([fx, hang_y, top_in]) rotate([0, 0, 180])
-        import("stl/2026-11-03_feeder_insert_v11.stl");
+        import("stl/feeder_insert_qty=2.stl");
     translate([fx, face_y, top_in]) {
         color([0.15, 0.15, 0.17]) translate([-fd[0] / 2, -black_l, -fd[2]]) cube([fd[0], black_l, fd[2]]);
         color("white") translate([-fd[0] / 2, -fd[1], -fd[2]]) cube([fd[0], fd[1] - black_l, fd[2]]);
@@ -230,10 +223,8 @@ for (c = [
     ["1010", "shell frame, vertical", 2, sd[6]],
     ["1010", "door frame, top and bottom", 2, X],
     ["1010", "door frame, sides", 2, Z - 2 * ext],
-    ["1010", "floor rail, outer pieces", 2, len1(rail_x[0])],
-    ["1010", "floor rail, inner pieces", 2, len1(rail_x[1])],
     ["8 mm rod", "door bar", 1, bar_len()],
-    ["8 mm rod", "holder rods", 4, hW],
+    ["8 mm rod", "holder rods", 4, holder_rod_len()],
 ]) echo(str("CUT | ", c[0], " | ", c[1], " | ", c[2], " x ", c[3]));
 for (c = [
     ["tunnel floor", 1, tun_w, tun_l],
@@ -243,4 +234,4 @@ for (c = [
     ["tray sides", 2, dr[1], dr[2] - t],
     ["tray ends", 2, dr[0] - 2 * t, dr[2] - t],
 ]) echo(str("CUT | acrylic | ", c[0], " | ", c[1], " x ", c[2], " x ", c[3]));
-echo(str("TOTAL | 1010 ", 2 * sd[5] + 2 * sd[6] + 2 * X + 2 * (Z - 2 * ext) + 2 * len1(rail_x[0]) + 2 * len1(rail_x[1]), " mm"));
+echo(str("TOTAL | 1010 ", 2 * sd[5] + 2 * sd[6] + 2 * X + 2 * (Z - 2 * ext) , " mm"));

@@ -20,7 +20,7 @@ case_z = top_in - 30;
 
 // insert, rotated so its cable slot faces the back wall
 color([0.95, 0.55, 0.1]) translate([fx, hang_y, top_in]) rotate([0, 0, 180])
-    import("stl/2026-11-03_feeder_insert_v11.stl");
+    import("stl/feeder_insert_qty=2.stl");
 
 // feeder: clip face against the insert's underside, outlet face at face_y
 translate([fx, face_y, top_in]) {
