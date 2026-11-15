@@ -9,11 +9,36 @@ Laser-cut 6 mm cast acrylic, a 1010 aluminium extrusion door frame, and a handfu
 parts. Designed parametrically in OpenSCAD; every part was fit-tested on the printer before
 anything gets cut.
 
-> **Status (2026-11-07):** design nearly closed. Printed parts tested; acrylic not cut yet.
-> Waiting on the desiccant pan to arrive so the tunnel can be sized to it. Renders show the pan at
-> its assumed size.
+> **Status (2026-11-15):** built and running. Sealed for the first time on 2026-11-14 with the
+> gel loaded; the printer feeds from it. Overnight the air by the pan fell from 44 % to 18 % RH, and
+> the rest of the box to 30 % and still dropping. The shell is dry-fitted, not yet cemented.
 
-![The dry box in the cart's middle bay, door closed](images/2026-11-11_readme_closed.png)
+![The finished box in the cart's middle bay under the U1](images/2026-11-15_photo_full_setup.jpg)
+
+## Built
+
+![Door closed: four feeding spools, spares on the deck, pan in the tunnel, hygrometers along the front](images/2026-11-15_photo_door_closed.jpg)
+
+| | |
+|---|---|
+| ![Laser-cut shell panels](images/2026-11-15_photo_laser_cut.jpg) | ![Shell and door frame, dry-fitted](images/2026-11-15_photo_shell_dry_fit.jpg) |
+| Shell panels off the laser (film off, kerf 0.25) | Shell dry-fitted, door frame VHB-bonded to the door |
+| ![Bench test fit with spools and pan](images/2026-11-15_photo_bench_test_fit.jpg) | ![Silica gel under the perforated deck](images/2026-11-15_photo_desiccant.jpg) |
+| First test fit on the bench | Gel loaded under the deck; 43 to 44 % RH at seal-up |
+| ![Printed swing-bolt latch](images/2026-11-15_photo_latch.jpg) | |
+| Printed swing-bolt latch | |
+
+Lessons from the build:
+- Kerf 0.25 was too tight for the long finger joints: the shell only closed with a mallet. Use
+  about 0.20 on a re-cut.
+- The butt-jointed tunnel needed printed jigs to glue square. Next time: tabs into slots, like the shell.
+- Moving the feeders lengthens the filament path, so the U1's fixed load distance stops short of the
+  toolhead. Either match the stock tube length or raise `preload_length` in the printer config.
+- With no fan, the air by the gel dries first; the rest of the box follows over a day or more.
+
+## The design
+
+![The dry box in the cart's middle bay, door closed (render)](images/2026-11-11_readme_closed.png)
 
 ## What it does
 
@@ -103,7 +128,7 @@ a PG13.5 gland, and an Elite Global Solutions SS6152 stainless pan. Full list in
 interior (tunnel, deck, holder plates) nests on the fourth. Film comes off before cutting.
 
 **Printed:** hinge loops and rings, latch saddles, barrels and catches, the door handle, corner
-brackets (used to hold the door frame square while the VHB cures, then moved to the shell frame),
+brackets (door frame only; the shell panels screw straight to the shell frame),
 feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
 with the count per box.
 
@@ -123,6 +148,9 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-11-03_swing_latch.scad`](scad/2026-11-03_swing_latch.scad) | Latch saddle and barrel |
 | [`2026-11-02_feeder_insert.scad`](scad/2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
 | [`2026-10-31_dry_box_bracket.scad`](scad/2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
+| [`2026-11-11_tunnel_jig.scad`](scad/2026-11-11_tunnel_jig.scad) | Printed jig that holds the tunnel walls square while the cement cures |
+| [`2026-11-14_collet_tool.scad`](scad/2026-11-14_collet_tool.scad) | Acrylic pusher that rides on the feeder tubes and presses both collet releases |
+| [`2026-11-14_tapered_handle.scad`](scad/2026-11-14_tapered_handle.scad) | Tapered door handle (screws on the 45 degree ends), matches the cart's red handle |
 | [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md) | Fasteners, bought parts, printed parts |
 | [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md) | Every saw and laser cut, in order: acrylic rips, laser strips, rods, 1010 |
 
@@ -138,12 +166,9 @@ for the record; superseded ones say so in their headers.
 
 ## Before cutting
 
-Nothing gets cut until every design choice is closed ("you can't uncut"). The shell, rods and 1010 are
-closed: see [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md). Still open:
-
-- Measure the desiccant pan, then narrow the tunnel to it, drop the acrylic tray and re-nest the
-  interior sheet (tunnel, deck, holder plates and strips) on strips the laser takes.
-- Test-cut a feeder gasket and one holder plate.
+Nothing gets cut until every design choice is closed ("you can't uncut"). The shell, rods, 1010 and
+interior (tunnel narrowed to the measured pan, acrylic tray dropped) are closed: see
+[`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md).
 
 ## Why not just buy one?
 

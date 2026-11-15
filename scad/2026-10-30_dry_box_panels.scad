@@ -12,6 +12,10 @@ t      = 5.8;      // sheet thickness: "6 mm" cast acrylic, 2026-11-02 caliper m
                    // bare about 5.4 to 6.0, typical 5.6 to 5.7 (film 0.1 to 0.3). Set near the thick
                    // end so fingers are never recessed; thin spots stand <= 0.4 proud, sand flush.
 kerf   = 0.25;     // laser kerf (xTool P3, 6 mm cast acrylic: 0.25 snug in the 2026-10-30 coupon)
+                   // 2026-11-12 dry fit (not glued): 0.25 was too tight on the full box, the long
+                   // finger joints only closed with a mallet. For any re-cut use about 0.20
+                   // (smaller kerf = looser), or cut a full-length test joint first. The cut
+                   // files as staged were made with 0.25.
 finger = 30;       // target finger width
 // holes cut smaller than the joints predict: the 0.20-kerf coupon's 10.5 hole measured
 // 10.4, i.e. the laser widens small holes by only ~0.10. Holes are drawn so they come
@@ -36,13 +40,14 @@ ext      = 10;
 ext_h    = X - 2 * t;            // horizontal members
 ext_v    = Z - 2 * t - 2 * ext;  // vertical members
 screw_d  = 3.4;                  // M3 clearance; screws go into the frame's outer slot (T-nuts)
-// 1010 T-slot screws: the channel is 3.2 mm deep from the extrusion face, so the screw tip
-// may reach at most tnut_tip past the face (0.2 mm margin). Frame screws: M3 x 8 through t
+// 1010 T-slot screws: an M3 bottoms 2.7 mm below the extrusion face in a T-nut (measured
+// 2026-11-11: an M3 x 8 tightened alone leaves 5.3 showing; 3.2 was assumed before), so the
+// screw tip may reach at most tnut_tip past the face (0.2 mm margin). Frame screws: M3 x 8 through t
 // reach 8 - t = 2.2 mm (tested 2026-10-30: fits without a washer, no cracking at 5 mm
 // edge distance). Anything bolted to the frame (hinges, latches): screw length <=
 // part thickness + tnut_tip. Screws that don't go into a T-nut can be longer.
-channel  = 3.2;
-tnut_tip = channel - 0.2;       // 3.0 mm
+channel  = 2.7;                 // measured screw depth to the stop (was 3.2 assumed)
+tnut_tip = channel - 0.2;       // 2.5 mm
 n_screw_h = 4;                   // per horizontal member, through the top and bottom panels
 n_screw_v = 2;                   // per vertical member, through the side panels
 

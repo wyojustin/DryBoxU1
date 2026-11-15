@@ -83,16 +83,15 @@ for (k = [0 : 1]) translate([hold_x[k], spool_y, t]) rotate([0, 0, k * 180]) {
 // spares, 2 stacks of 2, flat.
 dr      = int_dr(); dr_air = int_air();                 // tray x, y, z; air gap above it
 tn      = int_tun();
-dr_x0   = X / 2 - dr[0] / 2; dr_y0 = back_in - 4 - dr[1];
 tun_in  = tn[0];                                        // between the tunnel walls
 tun_x   = [X / 2 - tun_in / 2 - t, X / 2 + tun_in / 2]; // the walls' left faces
 deck_z  = 2 * t + dr[2] + dr_air;                       // deck's underside
-// the tray is now a bought pan (2026-11-07): Elite Global Solutions SS6152, 15 x 6 x 2 in body,
-// wire end handles. ASSUMED until it arrives: body 381 x 152 x 51, 1 mm wall, handles stand 12.7
-// off the ends (from photos), loop 114 wide, 5 mm rod, lower wire 10 above the bottom.
-// Back handle 4 off the back wall.
-pan     = [152.4, 381, 50.8]; pan_wall = 1.0;
-pan_hdl = [114, 12.7, 5, 10, 40];     // loop width, stand-off, rod d, lower and upper wire z
+// the tray is a bought pan: Elite Global Solutions SS6152, measured 2026-11-11 (interior file):
+// body 153 x 384 x 51, handles 9 off each end, 5 mm wire 6.5 above the bottom. Still assumed:
+// 1 mm wall, loop 114 wide, upper wire 40. Back handle 4 off the back wall.
+ph      = int_pan_hdl();
+pan     = [dr[0], dr[1], dr[2]]; pan_wall = 1.0;
+pan_hdl = [114, ph[0], ph[1], ph[2], 40];   // loop width, stand-off, rod d, lower and upper wire z
 pan_y0  = back_in - 4 - pan_hdl[1] - pan[1];
 module pan_handle() {                 // in the end face's plane at y = 0, sticking out toward -y
     w = pan_hdl[0]; so = pan_hdl[1]; d = pan_hdl[2]; z0 = pan_hdl[3]; z1 = pan_hdl[4];
@@ -124,7 +123,7 @@ store_x = [(t + tun_x[0]) / 2, (tun_x[1] + t + X - t) / 2];
 if (show_spools) for (x = store_x) color("burlywood") translate([x, stack_y[0], t + spool_w / 2])
     difference() { cylinder(d = spool_d, h = spool_w, center = true, $fn = 96); cylinder(d = 55, h = spool_w + 2, center = true, $fn = 48); }
 
-echo(str("drawer ", dr, " y ", dr_y0, " .. ", dr_y0 + dr[1], "; tunnel outer x ", tun_x[0], " .. ", tun_x[1] + t,
+echo(str("pan ", pan, " y ", pan_y0, " .. ", pan_y0 + pan[1], " (handles to ", pan_y0 - pan_hdl[1], ")", "; tunnel outer x ", tun_x[0], " .. ", tun_x[1] + t,
          "; deck top z ", deck_z + t, "; stack top z ", deck_z + t + 2 * spool_w + 0.5, " (top inside ", top_in, "); front stack front y ", stack_y[1] - spool_d / 2,
          "; holders end x ", hold_x[0] + hW + holder_wall_off() - 1,   // outer plate + cap stand-off + cap
          "; storage gap ", tun_x[0] - t, ", front y ", stack_y[0] - spool_d / 2,
@@ -230,8 +229,5 @@ for (c = [
     ["tunnel floor", 1, tun_w, tun_l],
     ["tunnel walls", 2, deck_z - 2 * t, tun_l],
     ["tunnel deck", 1, tun_w, tn[3]],
-    ["tray bottom", 1, dr[0], dr[1]],
-    ["tray sides", 2, dr[1], dr[2] - t],
-    ["tray ends", 2, dr[0] - 2 * t, dr[2] - t],
 ]) echo(str("CUT | acrylic | ", c[0], " | ", c[1], " x ", c[2], " x ", c[3]));
 echo(str("TOTAL | 1010 ", 2 * sd[5] + 2 * sd[6] + 2 * X + 2 * (Z - 2 * ext) , " mm"));

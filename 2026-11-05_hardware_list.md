@@ -1,16 +1,16 @@
 # Dry box hardware list (2026-11-05)
 
 Counted by hand from the panels' holes and the door mounts file. Lengths follow the rule in the
-panels file: into a T-nut, screw length <= part thickness + 3.0.
+panels file: into a T-nut, screw length <= part thickness + 2.5 (an M3 bottoms 2.7 below the 1010 face, measured 2026-11-11).
 
 ## Fasteners
 
 | Item | Qty | Where |
 |---|---|---|
 | M3 x 8 | 12 | panels into the shell frame (top 4, bottom 4, sides 2 each) |
-| M3 x 8 | 16 | corner brackets, used on the door frame, then the shell |
+| M3 x 4 countersunk | 16 | corner brackets, used on the door frame, then the shell; the ones that come with the T-nuts |
 | M3 x 16 | 8 | loops through the bottom panel, saddles through the top (2 each) |
-| M3 x 5 | 4 | hinge rings into the door frame (2 each); 2 mm floor, so 5 is the most that fits |
+| M3 x 4 socket head | 4 | hinge rings into the door frame (2 each); 2 mm floor, reach 2.0 (an M3 x 5 reaches 3.0 and bottoms at 2.7; with a 0.5 washer it reaches 2.5) |
 | M3 x 6 | 4 | catches, leg into the door frame's outer slot (2 each) |
 | M3 x 6 | 2 | handle into the door frame's outer slot |
 | M3 x 10 grub | 4 | seal adjusters (2 per loop) |

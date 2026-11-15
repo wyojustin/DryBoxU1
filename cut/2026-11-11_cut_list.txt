@@ -1,0 +1,21 @@
+CUT | 1010 | shell frame, horizontal | 2 x 628.4
+CUT | 1010 | shell frame, vertical | 2 x 226.4
+CUT | 1010 | door frame, top and bottom | 2 x 640
+CUT | 1010 | door frame, sides | 2 x 238
+CUT | 8 mm rod | door bar | 1 x 381
+CUT | 8 mm rod | holder rods | 4 x 189
+CUT | acrylic | tunnel floor | 1 x 168.6 x 413.7
+CUT | acrylic | tunnel walls | 2 x 76 x 413.7
+CUT | acrylic | tunnel deck | 1 x 168.6 x 423.2
+TOTAL | 1010 3465.6 mm
+
+LASER | file | stock (all 908 long) | uses, art 5 from the factory edge
+LASER | strip1_top_left_qty=1.svg | 450 strip | 901.5 x 430.25, centered on the length | CUT
+LASER | strip2_bottom_right_qty=1.svg | 436 strip | 901.5 x 430.25, centered, art 2 from the factory edge | CUT
+LASER | strip3_back_qty=1.svg | 299 strip | 641 x 259 | CUT
+LASER | strip4_door_qty=1.svg | 304 strip | 641 x 259 | CUT
+LASER | tunnel_floor_deck_qty=1.svg | 298 (sheet 1 half) | 843.2 x 168.9: deck (80 holes) + floor | 
+LASER | tunnel_walls_holder_strips_qty=1.svg | 165 offcut (narrowest >= 162) | 601.4 x 155.3: 2 walls + 4 holder strips | 
+LASER | holder_plates_qty=1.svg | 153 offcut | 534.3 x 103.3: 4 outer + 2 middle plates | 
+LASER | feeder_gasket_pair_qty=1.svg | EVA | 2 feeder gaskets | 
+SPARE | 305 (sheet 1 half), kerf_coupon (already cut), panel_* (same parts as the strips: never cut both)

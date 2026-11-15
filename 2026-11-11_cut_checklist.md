@@ -1,7 +1,7 @@
 # DryBoxU1 cut checklist (2026-11-11)
 
 Everything that gets sawn or lasered, in order. Units mm. Lengths come from the `.scad` files
-(`scad/2026-11-03_dry_box_assembly.scad` prints them; copy in [`cut/2026-11-05_cut_list.txt`](cut/2026-11-05_cut_list.txt)).
+(`scad/2026-11-03_dry_box_assembly.scad` prints them; copy, with the laser file for each piece, in [`cut/2026-11-11_cut_list.txt`](cut/2026-11-11_cut_list.txt)).
 Figures (in the history, commit 774f584): [rip plan](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_rip_plan.png),
 [cut sheets](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_cut_sheets.png), [cut plan with tight spots](https://github.com/wyojustin/DryBoxU1/blob/774f584/renders/2026-11-11_cut_plan.png).
 
@@ -25,7 +25,7 @@ it, guide clamped on the strip you keep, kerf (about 1.8) on the waste side. Eve
 - [ ] Measure each strip at both ends and the middle.
 - [ ] Label each strip on the film: number, plus an arrow on the factory edge (the laser's y = 0).
 - [ ] Keep the two 151 x 910 offcuts and the ~260 x 300 ends of strips 3 and 4 for interior parts.
-- [ ] Sheet 1 stays whole (interior, see 5).
+- [x] Sheet 1 cut in half by hand: 298 and 305 x 908 (interior, see 5).
 
 ## 2. Laser: shell (peel the film first)
 
@@ -72,7 +72,16 @@ aluminum loads the wheel. Deburr every end. Total 3465.6 plus kerfs; two parts p
 Stick pairing: 628.4 + 226.4 on each of two sticks, 640 + 238 on each of two more. A member cut
 long can be filed to length; one cut short cannot be fixed, so cut 1 long and sneak up.
 
-## 5. Not yet
+## 5. Laser: interior (peel the film first)
 
-- [ ] Interior sheet (sheet 1: tunnel floor, walls, deck, holder plates and strips): re-nested after the
-      pan is measured. Sheet 1 also needs ripping (603 is over the laser's 530 limit).
+Pan measured 2026-11-11 (153 x 384 x 51, 402 with handles): tunnel 157 inside, walls 76, acrylic
+tray dropped. All pieces 908 long; art 5 from the factory edge, centered on the length.
+
+| | Piece | File | Parts | Art (x by y) |
+|---|---|---|---|---|
+| [ ] | 298 (sheet 1 half) | [`cut/tunnel_floor_deck_qty=1.svg`](cut/tunnel_floor_deck_qty=1.svg) | deck (80 holes) + floor | 843.2 x 168.9 |
+| [ ] | 165 offcut | [`cut/tunnel_walls_holder_strips_qty=1.svg`](cut/tunnel_walls_holder_strips_qty=1.svg) | 2 tunnel walls + 4 holder strips | 601.4 x 155.3 |
+| [ ] | 153 offcut | [`cut/holder_plates_qty=1.svg`](cut/holder_plates_qty=1.svg) | 4 outer + 2 middle holder plates | 534.3 x 103.3 |
+
+Tight spot: the 165 leaves 4.9 to the sawn edge; its narrowest point must be at least 162.
+The 305 half stays spare.
