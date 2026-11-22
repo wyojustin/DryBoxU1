@@ -12,7 +12,7 @@
 //    swings down and hangs. The box's front overhangs the bay by 41 mm, so the underside is
 //    clear, and there is ~350 mm of open space below.
 // Removing the door: loosen the 2 knobs, swing the screws down, tilt the bottom out, lift off.
-// part = "assembly" | "hook" | "keeper" (the loop) | "bar_cap" | "catch" | "catch_print" | "knob" | "handle"; swing = 0 (latched) .. 90 (hanging).
+// part = "assembly" | "hook" | "keeper" (the loop) | "bar_cap" | "upright" (2026-11-19, replaces the catch) | "catch" | "catch_print" | "knob" | "handle"; swing = 0 (latched) .. 90 (hanging).
 // Box axes: y = 0 the shell's front face, z = 0 the box bottom. Units mm.
 
 use <2026-11-03_swing_latch.scad>
@@ -205,12 +205,40 @@ module knob2() {   // stand-in for Justin's bought M5 x 35 knobs (35 of thread u
         }
     }
 }
+// ---------------- 2026-11-19: 1010 uprights in place of the catches (Justin) ----------------
+// The knob's pull on a printed catch sat about 19 off the latch-side member's axis and twisted that
+// member (VHB on its back face only). Now a 1010 upright at each latch lies on the outer faces of
+// both door frame members, held by one M3 x 12 + washer into a T-nut in each member's outer slot
+// (holes drilled straight through the upright, front to back). It runs past the latch-side member's
+// end, and a U-slot in its end takes the knob screw: the upright is the catch. The pull goes down
+// the upright to the hinge-side member; the second screw holds the latch-side member square.
+// The knob bears 10 further out than on the catch's 3 mm leg, so its screw is 10 longer: M5 knob
+// with 45 of thread. Its tip lands 16 behind the box's front face, 3 deeper than the 35 reached from
+// the catch: still inside the barrel (6 to 18), past the nut, so the tail pocket doesn't change. uprights = false draws the printed catches as built 2026-11-15.
+uprights = true;
+up_tail  = 5;                          // upright past the knob screw's axis
+up_z     = [piv_z - up_tail, Z];       // flush with the hinge-side member's far face
+up_y     = [df_y[0] - ext, df_y[0]];   // on the frame's outer face
+up_hole  = 3.4;
+bolt_up  = 45;                         // knob thread with the uprights
+kn_y     = uprights ? up_y[0] : df_y[0] - ct_leg;   // knob face
+kn_l     = uprights ? bolt_up : bolt_l;
+module upright() color([0.70, 0.71, 0.73]) difference() {
+    translate([-ext / 2, up_y[0], up_z[0]]) cube([ext, ext, up_z[1] - up_z[0]]);
+    hull() {   // U-slot open at the end, round end on the knob screw's axis (same as the catch's)
+        translate([0, up_y[0] - 1, piv_z]) rotate([-90, 0, 0]) cylinder(d = slot_w, h = ext + 2, $fn = 32);
+        translate([-slot_w / 2, up_y[0] - 1, up_z[0] - 1]) cube([slot_w, ext + 2, 0.01]);
+    }
+    for (zz = [ext / 2, Z - ext / 2]) translate([0, up_y[0] - 1, zz]) rotate([-90, 0, 0]) cylinder(d = up_hole, h = ext + 2, $fn = 24);
+}
+module latch_catch() if (uprights) upright(); else color([0.2, 0.2, 0.22]) catch_part();
+
 module bottom_latch(lx, sw = 0) {
     color([0.95, 0.55, 0.1]) under(lx) saddle();
     translate([lx, piv_y, piv_z]) rotate([sw, 0, 0]) translate([0, -piv_y, -piv_z]) {   // swings down
         color([0.72, 0.72, 0.75]) translate([-10, piv_y, piv_z]) rotate([0, 90, 0]) cylinder(d = 10, h = 20, $fn = 48);
-        color("silver") translate([0, df_y[0] - ct_leg + bolt_l, piv_z]) rotate([90, 0, 0]) cylinder(d = 5, h = bolt_l, $fn = 24);
-        color([0.15, 0.15, 0.17]) translate([0, df_y[0] - ct_leg, piv_z]) knob2();
+        color("silver") translate([0, kn_y + kn_l, piv_z]) rotate([90, 0, 0]) cylinder(d = 5, h = kn_l, $fn = 24);
+        color([0.15, 0.15, 0.17]) translate([0, kn_y, piv_z]) knob2();
     }
 }
 
@@ -248,7 +276,7 @@ module door_mounts(sw = 0) {
     bar();
     for (lx = mount_x) {
         translate([lx, 0, 0]) { color([0.95, 0.55, 0.1]) keeper(); adjusters(); color([0.2, 0.2, 0.22]) hook(); }
-        color([0.2, 0.2, 0.22]) translate([lx, 0, 0]) catch_part();
+        translate([lx, 0, 0]) latch_catch();
         bottom_latch(lx, sw);
     }
 }
@@ -256,6 +284,7 @@ module door_mounts(sw = 0) {
 if (part == "hook") hook();
 else if (part == "keeper") keeper();
 else if (part == "bar_cap") bar_cap();
+else if (part == "upright") upright();
 else if (part == "catch") catch_part();
 else if (part == "catch_print") translate([0, 0, ct_leg - df_y[0]]) rotate([90, 0, 0]) catch_part();   // as printed: knob face on the bed, U-slot vertical
 else if (part == "knob") knob2();
@@ -264,3 +293,6 @@ else { context(); door_mounts(swing); }
 
 echo(str("bar centre y ", bar_yz[0], " z ", bar_yz[1], "; curve centre (closed) ", cc, ", inside r ", ri,
          " (play ", 2 * ri - bar_d, " until closed); ring top ", cc[1] + ri + hk_t, "; loop top ", Z + lp[2]));
+if (uprights) echo(str("uprights: 1010 x ", up_z[1] - up_z[0], " (2); from the hinge end: holes ", up_hole, " through, front to back, at ",
+    ext / 2, " and ", Z - ext / 2, "; U-slot ", slot_w, " wide from the latch end, round end ", up_z[1] - piv_z,
+    " from the hinge end (", up_tail, " from the latch end); knob thread ", bolt_up, ", tip at y ", kn_y + kn_l));

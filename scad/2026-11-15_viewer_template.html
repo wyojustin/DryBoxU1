@@ -1,0 +1,252 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: one full-screen 3D stage; a single compact control card floats top-left. */
+:root {
+  --stage: #eef1f4;
+  --card: #ffffff;
+  --ink: #1b2430;
+  --ink-soft: #5a6675;
+  --line: #d3d9e1;
+  --accent: #0b6e8f;
+  --font-display: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stage: #12171d; --card: #1c232c; --ink: #e6ebf1;
+    --ink-soft: #9aa6b4; --line: #303a46; --accent: #5cc0e0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --stage: #12171d; --card: #1c232c; --ink: #e6ebf1;
+  --ink-soft: #9aa6b4; --line: #303a46; --accent: #5cc0e0; color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--stage); color: var(--ink); font-family: var(--font-body);
+  font-size: 14px; line-height: 1.4; overflow: hidden; position: relative;
+}
+#stage { position: absolute; inset: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.card {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: max(16px, env(safe-area-inset-left, 0px));
+  width: min(250px, calc(100% - 32px));
+  max-height: calc(100% - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px; display: flex; flex-direction: column; gap: 12px;
+}
+h1 { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--ink-soft); font-size: 12px; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > label, .legend {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft);
+}
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+.parts { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.parts label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.parts input { accent-color: var(--accent); margin: 0; flex: none; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); flex: none; }
+button {
+  font: inherit; font-weight: 500; color: var(--ink); background: transparent;
+  border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; cursor: pointer;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.hint { color: var(--ink-soft); font-size: 12px; margin: 0; }
+#fail { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--ink-soft); }
+@media (max-width: 520px) {
+  .card { padding: 10px; gap: 8px; width: min(210px, calc(100% - 32px)); max-height: 55%; }
+  .hint { display: none; }
+}
+</style>
+
+<div id="stage"></div>
+<div id="fail" hidden>The 3D view could not start in this browser (WebGL is unavailable).</div>
+
+<div class="card">
+  <div>
+    <h1>__TITLE__</h1>
+    <p class="sub">__SUBTITLE__</p>
+  </div>
+  <div class="field" id="explode-field" hidden>
+    <label for="explode">Explode</label>
+    <input id="explode" type="range" min="0" max="40" step="1" value="0">
+  </div>
+  <fieldset class="parts" id="states" hidden>
+    <legend class="legend">State</legend>
+  </fieldset>
+  <fieldset class="parts" id="parts">
+    <legend class="legend">Parts</legend>
+  </fieldset>
+  <div class="row">
+    <button id="front" type="button">Front</button>
+    <button id="back" type="button">Back</button>
+    <button id="iso" type="button">Angled</button>
+  </div>
+  <p class="hint">Drag to rotate. Scroll or pinch to zoom. Right-drag or two fingers to pan.</p>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var data = JSON.parse(document.getElementById('data').textContent);
+
+  function bytes(b64) {
+    var bin = atob(b64), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out.buffer;
+  }
+  function token(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+  } catch (e) {
+    document.getElementById('fail').hidden = false;
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  stage.appendChild(renderer.domElement);
+
+  var V = data.view;
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(35, 1, V.dist / 100, V.dist * 20);
+  var controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.12;
+  var CENTER = new THREE.Vector3(V.center[0], V.center[1], V.center[2]);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a93a0, 0.85));
+  var key = new THREE.DirectionalLight(0xffffff, 0.55);
+  scene.add(key);
+
+  // one checkbox per label; a part can also belong to one state of a variant
+  var groups = {};    // label -> { on, color, items }
+  var variants = {};  // id -> current boolean
+  var items = [];     // { object, label, rank, variant: [id, bool] | null }
+  (data.variants || []).forEach(function (v) { variants[v.id] = v.on; });
+
+  function refresh() {
+    items.forEach(function (it) {
+      var ok = groups[it.label].on;
+      if (ok && it.variant) ok = variants[it.variant[0]] === it.variant[1];
+      it.object.visible = ok;
+    });
+  }
+  function track(object, p) {
+    if (!groups[p.label]) groups[p.label] = { on: true, color: p.color || null };
+    items.push({ object: object, label: p.label, rank: p.rank || 0, variant: p.variant || null });
+    scene.add(object);
+  }
+
+  data.parts.forEach(function (p) {
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(bytes(p.pos)), 3));
+    geo.setIndex(new THREE.BufferAttribute(new Uint32Array(bytes(p.idx)), 1));
+    var clear = p.opacity < 1;
+    var mat = new THREE.MeshStandardMaterial({
+      color: p.color, roughness: 0.75, metalness: p.metal ? 0.6 : 0.0,
+      flatShading: true, transparent: clear, opacity: p.opacity, depthWrite: !clear,
+      side: THREE.DoubleSide
+    });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.renderOrder = clear ? 2 : 0;
+    track(mesh, p);
+  });
+
+  var lineMat = new THREE.LineBasicMaterial({ color: 0x2b3440 });
+  (data.lines || []).forEach(function (l) {
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(bytes(l.pos)), 3));
+    var seg = new THREE.LineSegments(geo, lineMat);
+    seg.renderOrder = 3;
+    track(seg, l);
+  });
+
+  function checkbox(parent, id, text, checked, swatch, onchange) {
+    var row = document.createElement('label');
+    row.setAttribute('for', id);
+    var box = document.createElement('input');
+    box.type = 'checkbox'; box.checked = checked; box.id = id;
+    box.addEventListener('change', function () { onchange(box.checked); refresh(); });
+    row.appendChild(box);
+    if (swatch !== undefined) {
+      var sw = document.createElement('span');
+      sw.className = 'swatch';
+      sw.style.background = swatch || 'transparent';
+      row.appendChild(sw);
+    }
+    var span = document.createElement('span');
+    span.textContent = text;
+    row.appendChild(span);
+    parent.appendChild(row);
+  }
+
+  var stateList = document.getElementById('states');
+  (data.variants || []).forEach(function (v, i) {
+    stateList.hidden = false;
+    checkbox(stateList, 'state-' + i, v.label, v.on, undefined, function (on) { variants[v.id] = on; });
+  });
+  var partList = document.getElementById('parts');
+  Object.keys(groups).forEach(function (label, i) {
+    checkbox(partList, 'part-' + i, label, true, groups[label].color, function (on) { groups[label].on = on; });
+  });
+
+  var slider = document.getElementById('explode');
+  var hasRanks = items.some(function (it) { return it.rank !== 0; });
+  document.getElementById('explode-field').hidden = !hasRanks;
+  function explode() {
+    var d = Number(slider.value);
+    items.forEach(function (it) { it.object.position.z = it.rank * d; });
+  }
+  slider.addEventListener('input', explode);
+
+  function view(dir) {
+    var dist = V.dist * Math.max(1, 0.9 / camera.aspect);
+    camera.position.copy(CENTER).add(dir.clone().normalize().multiplyScalar(dist));
+    controls.target.copy(CENTER);
+    controls.update();
+  }
+  document.getElementById('front').addEventListener('click', function () { view(new THREE.Vector3(0, 0, 1)); });
+  document.getElementById('back').addEventListener('click', function () { view(new THREE.Vector3(0, 0, -1)); });
+  document.getElementById('iso').addEventListener('click', function () { view(new THREE.Vector3(0.9, 0.55, 1)); });
+
+  function theme() {
+    renderer.setClearColor(new THREE.Color(token('--stage') || '#eef1f4'), 1);
+    lineMat.color.set(token('--ink') || '#1b2430');
+  }
+  function resize() {
+    var w = stage.clientWidth || 1, h = stage.clientHeight || 1;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', theme);
+  }
+  new MutationObserver(theme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  resize(); theme(); explode(); refresh();
+  view(new THREE.Vector3(0.9, 0.55, 1));
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    controls.update();
+    key.position.copy(camera.position).add(new THREE.Vector3(V.dist / 4, V.dist / 2.5, V.dist / 6));
+    renderer.render(scene, camera);
+  })();
+})();
+</script>

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U1 Feed Length</title>
+<!--
+  2026-11-22: Snapmaker U1 feed length (preload_length) checker and setter.
+
+  Why: feeders moved away from the printer (dry box, PopStation, rear mount) need a longer
+  preload_length than the stock 950, and Snapmaker resets printer.cfg (at every boot unless
+  Advanced Mode is on, and on firmware updates). Open this page after an update: green means
+  your value is still there, red means put it back with one button.
+
+  Install: copy this file onto the printer as /home/lava/fluidd/feed_length.html (needs Root
+  Access for scp), then open http://<printer-ip>/feed_length.html and bookmark it. It must be
+  opened from the printer: it talks to Moonraker through Fluidd's own address.
+
+  Facts from firmware 1.4.1 (filament_feed.py): preload_length must be 600 .. 1500 or Klipper
+  will not start; the feeder stops early when the toolhead sensor sees filament, so the value
+  is only the most it pushes; 45 s time limit. Writing needs Advanced Mode (Settings >
+  Maintenance > Advanced Mode on the touchscreen).
+-->
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1d2228; --muted: #5d6670; --line: #dde1e6;
+    --ok: #1f7a3d; --ok-bg: #e6f4ea; --bad: #b3261e; --bad-bg: #fbe9e7; --warn: #8a5a00; --warn-bg: #fff4dc;
+    --accent: #2b6cb0; --accent-text: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181c; --card: #1e2227; --text: #e6e9ec; --muted: #9aa3ad; --line: #30363d;
+      --ok: #7fd49a; --ok-bg: #173022; --bad: #ff8a80; --bad-bg: #3a1c1a; --warn: #f2c66d; --warn-bg: #3a2f14;
+      --accent: #5b9be0; --accent-text: #0d1117;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; gap: 12px; }
+  .row + .row { border-top: 1px solid var(--line); }
+  .label { color: var(--muted); }
+  .val { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+  .ok { color: var(--ok); background: var(--ok-bg); }
+  .bad { color: var(--bad); background: var(--bad-bg); }
+  .warn { color: var(--warn); background: var(--warn-bg); }
+  .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .feeders { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feeder { border: 1px solid var(--line); border-radius: 8px; padding: 12px; text-align: center; }
+  .feeder .name { color: var(--muted); font-size: 14px; }
+  label { display: block; color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+  .set { display: flex; gap: 8px; }
+  input[type=number] { flex: 1; min-width: 0; font-size: 18px; padding: 8px 10px; border-radius: 8px;
+                       border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+  button { font-size: 16px; padding: 9px 16px; border-radius: 8px; border: 0; cursor: pointer;
+           background: var(--accent); color: var(--accent-text); font-weight: 600; }
+  button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--line); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  #log { font: 13px/1.5 ui-monospace, Menlo, monospace; color: var(--muted); white-space: pre-wrap; margin: 0; }
+  .hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>U1 Feed Length</h1>
+  <p class="sub">preload_length for both feeders, in printer.cfg</p>
+
+  <div class="card">
+    <div class="feeders">
+      <div class="feeder"><div class="name">Left feeder</div><div class="big" id="left">…</div><div id="leftTag"></div></div>
+      <div class="feeder"><div class="name">Right feeder</div><div class="big" id="right">…</div><div id="rightTag"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <label for="want">Your value (mm), 600 to 1500</label>
+    <div class="set">
+      <input id="want" type="number" min="600" max="1500" step="10">
+      <button id="apply" disabled>Set both and restart</button>
+    </div>
+    <p class="hint">Backs up printer.cfg first, then restarts Klipper (about 30 s). Not allowed while printing.</p>
+  </div>
+
+  <div class="card">
+    <div class="row"><span class="label">Advanced Mode (config writable)</span><span class="val" id="adv">…</span></div>
+    <div class="row"><span class="label">Printer state</span><span class="val" id="state">…</span></div>
+    <div class="row"><span class="label">Firmware</span><span class="val" id="fw">…</span></div>
+    <div class="row"><span class="label">Stock value</span><span class="val">950</span></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="padding-top:0"><span class="label">Activity</span><button class="secondary" id="refresh">Refresh</button></div>
+    <pre id="log"></pre>
+  </div>
+</main>
+<script>
+// ---- your value: Humpty dry box, 2.5 ft PTFE (762) + 600 inside the printer = 1362, plus margin ----
+const MY_PRELOAD = 1450;
+
+const MIN = 600, MAX = 1500, STOCK = 950;
+const SECTIONS = { left: 'filament_feed left', right: 'filament_feed right' };
+const $ = id => document.getElementById(id);
+const store = {
+  get() { try { return localStorage.getItem('u1_preload'); } catch (e) { return null; } },
+  set(v) { try { localStorage.setItem('u1_preload', String(v)); } catch (e) {} },
+};
+let st = { writable: false, state: '', cfgOk: false };
+
+function log(msg) {
+  const t = new Date().toLocaleTimeString();
+  $('log').textContent = `${t}  ${msg}\n` + $('log').textContent;
+}
+
+async function api(path, opts) {
+  const r = await fetch(path, Object.assign({ cache: 'no-store' }, opts));
+  let body = null;
+  try { body = await r.json(); } catch (e) {}
+  if (!r.ok) throw new Error((body && body.error && body.error.message) || `HTTP ${r.status}`);
+  return body ? body.result : null;
+}
+
+async function readCfg() {
+  const r = await fetch('/server/files/config/printer.cfg', { cache: 'no-store' });
+  if (!r.ok) throw new Error(`printer.cfg: HTTP ${r.status}`);
+  return r.text();
+}
+
+// walk printer.cfg; within our two sections, find (and optionally replace) preload_length
+function scan(text, newValue) {
+  const lines = text.split('\n');
+  const found = {};
+  let section = null;
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i];
+    if (ln.startsWith('#*#')) break;                       // SAVE_CONFIG block: leave alone
+    const m = ln.match(/^\s*\[([^\]]+)\]/);
+    if (m) { section = m[1].trim().replace(/\s+/g, ' '); continue; }
+    const key = Object.keys(SECTIONS).find(k => SECTIONS[k] === section);
+    if (!key) continue;
+    const p = ln.match(/^(\s*preload_length\s*[:=]\s*)([0-9.]+)(.*)$/);
+    if (p) {
+      found[key] = parseFloat(p[2]);
+      if (newValue !== undefined) lines[i] = p[1] + newValue + p[3];
+    }
+  }
+  return { found, text: lines.join('\n') };
+}
+
+function tag(id, v, want) {
+  const el = $(id);
+  if (v === undefined) { el.innerHTML = '<span class="pill bad">not found</span>'; return; }
+  if (v === want) el.innerHTML = '<span class="pill ok">matches</span>';
+  else if (v === STOCK) el.innerHTML = '<span class="pill bad">stock, reset?</span>';
+  else el.innerHTML = '<span class="pill warn">differs</span>';
+}
+
+function wantValue() { return parseInt($('want').value, 10); }
+
+function updateButton() {
+  const v = wantValue();
+  const okV = Number.isFinite(v) && v >= MIN && v <= MAX;
+  const busy = ['printing', 'paused'].includes(st.state);
+  $('apply').disabled = !(okV && st.writable && st.cfgOk && !busy);
+}
+
+async function refresh() {
+  if (location.protocol === 'file:') {
+    log('Open this page from the printer (http://<printer-ip>/feed_length.html), not from a file.');
+    return;
+  }
+  try {
+    const roots = await api('/server/files/roots');
+    const cfg = roots.find(r => r.name === 'config');
+    st.writable = !!(cfg && cfg.permissions.includes('w'));
+    $('adv').innerHTML = st.writable ? '<span class="pill ok">on</span>' : '<span class="pill bad">off: edits reset at boot</span>';
+  } catch (e) { $('adv').textContent = '?'; log('roots: ' + e.message); }
+
+  try {
+    const q = await api('/printer/objects/query?print_stats');
+    st.state = q.status.print_stats.state;
+  } catch (e) { st.state = 'klipper not ready'; }
+  $('state').textContent = st.state;
+
+  try {
+    const r = await fetch('/server/files/config/snapmaker/product_info.json', { cache: 'no-store' });
+    $('fw').textContent = r.ok ? ((await r.json()).firmware_version || '?') : '?';
+  } catch (e) { $('fw').textContent = '?'; }
+
+  try {
+    const { found } = scan(await readCfg());
+    st.cfgOk = found.left !== undefined && found.right !== undefined;
+    const want = wantValue();
+    $('left').textContent = found.left ?? '–';
+    $('right').textContent = found.right ?? '–';
+    tag('leftTag', found.left, want);
+    tag('rightTag', found.right, want);
+  } catch (e) { st.cfgOk = false; log(e.message); }
+  updateButton();
+}
+
+async function waitReady(seconds) {
+  const t0 = Date.now();
+  await new Promise(r => setTimeout(r, 3000));
+  while (Date.now() - t0 < seconds * 1000) {
+    try {
+      const info = await api('/server/info');
+      if (info.klippy_state === 'ready') return true;
+      if (info.klippy_state === 'error') return false;
+    } catch (e) {}
+    await new Promise(r => setTimeout(r, 2000));
+  }
+  return false;
+}
+
+async function apply() {
+  const v = wantValue();
+  if (!(v >= MIN && v <= MAX)) { log(`Value must be ${MIN} to ${MAX}.`); return; }
+  if (!confirm(`Set preload_length to ${v} on both feeders and restart Klipper?`)) return;
+  $('apply').disabled = true;
+  try {
+    const q = await api('/printer/objects/query?print_stats');
+    if (['printing', 'paused'].includes(q.status.print_stats.state)) throw new Error('Printer is busy; try after the print.');
+
+    const before = await readCfg();
+    const { found, text } = scan(before, v);
+    if (found.left === undefined || found.right === undefined) throw new Error('preload_length not found in both feeder sections; nothing changed.');
+    if (found.left === v && found.right === v) { log(`Already ${v}; nothing to do.`); return; }
+
+    const d = new Date(), z = n => String(n).padStart(2, '0');
+    const stamp = `${d.getFullYear()}${z(d.getMonth() + 1)}${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`;
+    const backup = `printer-feedlen-${stamp}.cfg`;
+    await api('/server/files/copy', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source: 'config/printer.cfg', dest: `config/${backup}` }),
+    });
+    log(`Backed up to ${backup}`);
+
+    const fd = new FormData();
+    fd.append('root', 'config');
+    fd.append('file', new Blob([text], { type: 'text/plain' }), 'printer.cfg');
+    await api('/server/files/upload', { method: 'POST', body: fd });
+
+    const check = scan(await readCfg()).found;
+    if (check.left !== v || check.right !== v) throw new Error(`Saved file reads ${check.left} / ${check.right}; restore ${backup} in Fluidd.`);
+    log(`printer.cfg: ${found.left} / ${found.right} -> ${v} / ${v}. Restarting Klipper…`);
+    store.set(v);
+
+    await api('/printer/firmware_restart', { method: 'POST' });
+    const ok = await waitReady(90);
+    log(ok ? 'Klipper ready.' : 'Klipper not ready after 90 s: check the touchscreen or Fluidd.');
+  } catch (e) {
+    log('Stopped: ' + e.message);
+  } finally {
+    await refresh();
+  }
+}
+
+$('want').value = store.get() || MY_PRELOAD;
+$('want').addEventListener('input', () => { refresh(); });
+$('apply').addEventListener('click', apply);
+$('refresh').addEventListener('click', refresh);
+refresh();
+</script>
+</body>
+</html>

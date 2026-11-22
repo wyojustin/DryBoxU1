@@ -198,7 +198,7 @@ if (show_door) flip() door_swing() {
         cube([X, ext, Z]);
         translate([ext, -1, ext]) cube([X - 2 * ext, ext + 2, Z - 2 * ext]);
     }
-    for (lx = mount_x) translate([lx, 0, 0]) color([0.2, 0.2, 0.22]) { hook(); catch_part(); }
+    for (lx = mount_x) translate([lx, 0, 0]) { color([0.2, 0.2, 0.22]) hook(); latch_catch(); }   // 2026-11-19: latch_catch() is the 1010 upright (door mounts file)
     color([0.2, 0.2, 0.22]) translate([X / 2, 0, 0]) handle();
     // VHB, 12.7 wide and left untrimmed: flush with the frame's outer edge, 2.7 showing inside it
     color([0.6, 0.6, 0.62]) translate([0, -foam - t, 0]) rotate([90, 0, 0]) linear_extrude(1) difference() {

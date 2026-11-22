@@ -153,6 +153,7 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-11-14_tapered_handle.scad`](scad/2026-11-14_tapered_handle.scad) | Tapered door handle (screws on the 45 degree ends), matches the cart's red handle |
 | [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md) | Fasteners, bought parts, printed parts |
 | [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md) | Every saw and laser cut, in order: acrylic rips, laser strips, rods, 1010 |
+| [`2026-11-22_feed_length.md`](2026-11-22_feed_length.md) | U1 printer setting for the longer feed path (`preload_length`), and a page on the printer that checks it and puts it back after firmware updates |
 
 All `.scad` files live in [`scad/`](scad/); open them from there (the assembly imports STLs from
 `../stl/`). The other `.scad` files are concepts, gauges, fit tests and views from along the way, kept
@@ -161,6 +162,7 @@ for the record; superseded ones say so in their headers.
 - [`cut/`](cut/): laser files (SVG) exactly as staged for cutting, plus the cut list.
 - [`stl/`](stl/): the current printed parts only, one file per part, quantity in the name. Fit tests
   and superseded versions are in the git history. The assembly imports a few of them.
+- [`tools/`](tools/): the feed length page that runs on the printer (see the feed length guide).
 - [`images/`](images/): the pictures in this README. Earlier renders (the design's visual log) are in
   the git history.
 
