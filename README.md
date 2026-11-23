@@ -9,15 +9,21 @@ Laser-cut 6 mm cast acrylic, a 1010 aluminium extrusion door frame, and a handfu
 parts. Designed parametrically in OpenSCAD; every part was fit-tested on the printer before
 anything gets cut.
 
-> **Status (2026-11-15):** built and running. Sealed for the first time on 2026-11-14 with the
-> gel loaded; the printer feeds from it. Overnight the air by the pan fell from 44 % to 18 % RH, and
-> the rest of the box to 30 % and still dropping. The shell is dry-fitted, not yet cemented.
+> **Status (2026-11-22):** built and running. With the door shut the box holds 10 to 11 % RH at
+> 69 F (14 % on the reference hygrometer). The printed door catches are replaced by two 1010
+> uprights. Next: new feeder tubing, then the U1's feed length goes to 1450 (see the
+> [feed length guide](2026-11-22_feed_length.md)). The shell is dry-fitted, not yet cemented.
+>
+> First sealed 2026-11-14 with the gel loaded: overnight the air by the pan fell from 44 % to 18 %,
+> the rest of the box to 30 %.
 
 ![The finished box in the cart's middle bay under the U1](images/2026-11-15_photo_full_setup.jpg)
 
 ## Built
 
-![Door closed: four feeding spools, spares on the deck, pan in the tunnel, hygrometers along the front](images/2026-11-15_photo_door_closed.jpg)
+![Door closed with the 1010 uprights: 10 to 11 % RH along the front, 14 % on the reference hygrometer](images/2026-11-22_photo_uprights.jpg)
+
+*2026-11-22: the door with its two 1010 uprights under the latch knobs.*
 
 | | |
 |---|---|
@@ -25,15 +31,20 @@ anything gets cut.
 | Shell panels off the laser (film off, kerf 0.25) | Shell dry-fitted, door frame VHB-bonded to the door |
 | ![Bench test fit with spools and pan](images/2026-11-15_photo_bench_test_fit.jpg) | ![Silica gel under the perforated deck](images/2026-11-15_photo_desiccant.jpg) |
 | First test fit on the bench | Gel loaded under the deck; 43 to 44 % RH at seal-up |
-| ![Printed swing-bolt latch](images/2026-11-15_photo_latch.jpg) | |
-| Printed swing-bolt latch | |
+| ![Printed swing-bolt latch](images/2026-11-15_photo_latch.jpg) | ![Door closed, first week](images/2026-11-15_photo_door_closed.jpg) |
+| Printed swing-bolt latch (catch since replaced by an upright) | First week: spools, spares on the deck, pan in the tunnel |
 
 Lessons from the build:
 - Kerf 0.25 was too tight for the long finger joints: the shell only closed with a mallet. Use
   about 0.20 on a re-cut.
 - The butt-jointed tunnel needed printed jigs to glue square. Next time: tabs into slots, like the shell.
 - Moving the feeders lengthens the filament path, so the U1's fixed load distance stops short of the
-  toolhead. Either match the stock tube length or raise `preload_length` in the printer config.
+  toolhead. Either match the stock tube length or raise `preload_length` in the printer config:
+  [`2026-11-22_feed_length.md`](2026-11-22_feed_length.md) has the how-to and a page that puts it
+  back after firmware updates.
+- The printed catches let the knob's pull twist the door frame's top rail. A 1010 upright from the
+  bottom rail to each knob carries the pull to the hinge rail instead:
+  [`2026-11-21_door_uprights.md`](2026-11-21_door_uprights.md).
 - With no fan, the air by the gel dries first; the rest of the box follows over a day or more.
 
 ## The design
@@ -93,7 +104,8 @@ The rings are full circles with crush ribs, so the hinge glides without play.
 
 At the top, two printed saddles each hold a 12 mm barrel on a pivot. Swing the bolt up into the
 catch on the door frame, spin the knob down, and the door is pulled into the foam. Loosen the knob
-and swing the bolt back to open.
+and swing the bolt back to open. (Built: the printed catches were replaced by 1010 uprights with a
+slotted top end, see [`2026-11-21_door_uprights.md`](2026-11-21_door_uprights.md).)
 
 | Latched | Released |
 |---|---|
@@ -127,7 +139,7 @@ a PG13.5 gland, and an Elite Global Solutions SS6152 stainless pan. Full list in
 **Laser:** the shell is six finger-jointed panels nested on strips ripped from three sheets; the
 interior (tunnel, deck, holder plates) nests on the fourth. Film comes off before cutting.
 
-**Printed:** hinge loops and rings, latch saddles, barrels and catches, the door handle, corner
+**Printed:** hinge loops and rings, latch saddles and barrels, the door handle, corner
 brackets (door frame only; the shell panels screw straight to the shell frame),
 feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
 with the count per box.
@@ -151,8 +163,12 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-11-11_tunnel_jig.scad`](scad/2026-11-11_tunnel_jig.scad) | Printed jig that holds the tunnel walls square while the cement cures |
 | [`2026-11-14_collet_tool.scad`](scad/2026-11-14_collet_tool.scad) | Acrylic pusher that rides on the feeder tubes and presses both collet releases |
 | [`2026-11-14_tapered_handle.scad`](scad/2026-11-14_tapered_handle.scad) | Tapered door handle (screws on the 45 degree ends), matches the cart's red handle |
+| [`2026-11-16_fan_gland.scad`](scad/2026-11-16_fan_gland.scad) | Split threaded gland for a mixing fan's USB cable, in place of the PG13.5 |
+| [`2026-11-17_hygrometer_stand.scad`](scad/2026-11-17_hygrometer_stand.scad) | Laser-cut stand for the reference hygrometer (three pieces, half-laps, no glue) |
+| [`2026-11-21_four_spool_cart.scad`](scad/2026-11-21_four_spool_cart.scad) | Concept: a narrower 4-spool version on a 2020 cart with casters and a shelf under the spools |
 | [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md) | Fasteners, bought parts, printed parts |
 | [`2026-11-11_cut_checklist.md`](2026-11-11_cut_checklist.md) | Every saw and laser cut, in order: acrylic rips, laser strips, rods, 1010 |
+| [`2026-11-21_door_uprights.md`](2026-11-21_door_uprights.md) | Cut and drill sheet for the two 1010 door uprights that replace the printed catches |
 | [`2026-11-22_feed_length.md`](2026-11-22_feed_length.md) | U1 printer setting for the longer feed path (`preload_length`), and a page on the printer that checks it and puts it back after firmware updates |
 
 All `.scad` files live in [`scad/`](scad/); open them from there (the assembly imports STLs from
@@ -162,6 +178,7 @@ for the record; superseded ones say so in their headers.
 - [`cut/`](cut/): laser files (SVG) exactly as staged for cutting, plus the cut list.
 - [`stl/`](stl/): the current printed parts only, one file per part, quantity in the name. Fit tests
   and superseded versions are in the git history. The assembly imports a few of them.
+- [`viewer/`](viewer/): a 3D view of the box that opens in a browser (rotate, zoom, pan).
 - [`tools/`](tools/): the feed length page that runs on the printer (see the feed length guide).
 - [`images/`](images/): the pictures in this README. Earlier renders (the design's visual log) are in
   the git history.
