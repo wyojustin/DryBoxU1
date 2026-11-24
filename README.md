@@ -57,6 +57,18 @@ Lessons from the build:
   top were still at 15 to 17 %. With a small mixing fan, the whole box was at 10 to 13 % the next
   morning.
 
+## Humidity log
+
+Every reading from first seal (2026-11-14) to 2026-11-24, with the mixing fan, the uprights and a reel swap marked.
+
+![Humidity readings over ten days](images/2026-11-24_humidity_readings.png)
+
+Numbers: [`data/2026-11-24_humidity_readings.csv`](data/2026-11-24_humidity_readings.csv) (RH in %, the box's
+temperature in F where it was noted). `left` to `right` are the small hygrometers along the front, `top` the one on
+the stacked spares, `govee` the reference. The small ones read about 4 below the Govee, which settles
+slowly: the last reading still had it at 17 %, under three hours after the reel swap. Times are when each reading
+was reported.
+
 ## The design
 
 ![The dry box in the cart's middle bay, door closed (render)](images/2026-11-11_readme_closed.png)
@@ -190,6 +202,7 @@ for the record; superseded ones say so in their headers.
   and superseded versions are in the git history. The assembly imports a few of them.
 - [`viewer/`](viewer/): a 3D view of the box that opens in a browser (rotate, zoom, pan).
 - [`tools/`](tools/): the feed length page that runs on the printer (see the feed length guide).
+- [`data/`](data/): the humidity and temperature log (CSV).
 - [`images/`](images/): the pictures in this README. Earlier renders (the design's visual log) are in
   the git history.
 
