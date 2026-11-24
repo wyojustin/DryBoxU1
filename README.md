@@ -202,3 +202,8 @@ interior (tunnel narrowed to the measured pan, acrylic tray dropped) are closed:
 ## Why not just buy one?
 
 A commercial four-spool dryer exists for about $279. But builders gotta build.
+
+## License
+
+[MIT](LICENSE), for everything in this repo: the OpenSCAD sources, STLs, laser files, guides, pictures
+and the feed length page. Build it, change it, share it, sell it; just keep the copyright notice.
