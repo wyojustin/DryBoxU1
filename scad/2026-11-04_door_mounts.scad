@@ -190,9 +190,11 @@ module catch_part() {   // printed knob face down (catch_print), so the U-slot i
     }
 }
 kb_floor = 3;                         // knob plastic under the screw head; thin so an M5 x 35 reaches the barrel
-kb_seat  = 8.6; kb_rib = 0.25;        // M5 socket head (8.5 knurled): round pocket, 3 crush ribs grip it
+kb_head  = [8.3, 4.9];                // 2026-11-23: Justin's M5 x 45 socket head, measured: diameter, height
+kb_seat  = kb_head[0] + 0.3; kb_rib = 0.25;   // round pocket 8.6, 3 crush ribs to 8.1: 0.2 interference, glued in (epoxy)
 bolt_l   = 35;
-module knob2() {   // stand-in for Justin's bought M5 x 35 knobs (35 of thread under the face); also printable with an M5 x 35 socket-head screw
+module knob2() {   // stand-in for the bought M5 knobs; also the printed knob: an M5 socket-head screw glued into the pocket.
+                   // 2026-11-23: the printed knob is now knob4 (4 fins, below), with its own 1 mm floor.
     rotate([90, 0, 0]) difference() {
         union() {
             cylinder(d = 22, h = 10, $fn = 48);
@@ -205,6 +207,56 @@ module knob2() {   // stand-in for Justin's bought M5 x 35 knobs (35 of thread u
         }
     }
 }
+// 2026-11-23: four fully contoured fins (Justin), in place of knob2's flat bars; same pocket and floor.
+// Plan: a hub and four fins tapering from r1 to a round tip of r2, blended by a smooth union (k = fillet
+// size), so there are no corners anywhere. Sides drafted in 8 %, the top domed so each fin slopes down
+// k4_drop to its tip, the top edge rounded k4_rr all the way round. Bearing face flat, on the bed.
+// Built as one polyhedron (a Minkowski rounding took minutes): the plan radius is found per angle by
+// bisection on the smooth union's distance function, then each angle gets the same side / round / dome profile.
+k4_floor = 1;   // 2026-11-23 (Justin): at most 1 between the screw head and the 1010. M5 x 45: 44 of thread
+                // under the face, tip 15 behind the box's front face (barrel 6 to 18). Head top 12 - 1 - 4.9 = 6.1 below the crown.
+k4_tip = 15; k4_hub = 8.5; k4_r1 = 6; k4_r2 = 4.5; k4_k = 5;   // fin: tapered from r1 at the centre to a round tip of r2
+k4_h = 12; k4_drop = 2.5; k4_rr = 2.2; k4_draft = 0.08;
+k4_N = 144; k4_arc = 10; k4_top = 14;
+function k4_smin(a, b, k) = let(h = max(k - abs(a - b), 0) / k) min(a, b) - h * h * k / 4;
+function k4_fin(x, y) = let(hh = k4_tip - k4_r2, bb = (k4_r1 - k4_r2) / hh, aa = sqrt(1 - bb * bb), px = abs(x),
+        kk = -bb * px + aa * y)
+    kk < 0 ? norm([px, y]) - k4_r1 : kk > aa * hh ? norm([px, y - hh]) - k4_r2 : aa * px + bb * y - k4_r1;
+function k4_sdf(r, t) = let(f = (t + 45) % 90 - 45)   // nearest fin, fin axis along +y
+    k4_smin(r - k4_hub, k4_fin(r * sin(f), r * cos(f)), k4_k);
+function k4_ray(t, lo = 0, hi = 25, n = 24) = n == 0 ? (lo + hi) / 2 :
+    let(m = (lo + hi) / 2) k4_sdf(m, t) < 0 ? k4_ray(t, m, hi, n - 1) : k4_ray(t, lo, m, n - 1);
+k4_Rs = [for (i = [0 : k4_N - 1]) k4_ray(360 * i / k4_N)];
+function k4_R(t) = k4_Rs[round(t * k4_N / 360) % k4_N];
+function k4_z(r) = k4_h - k4_drop * (r / k4_tip) * (r / k4_tip);
+function k4_prof(R) = let(cx = R - k4_rr, s = 2 * k4_drop * cx / (k4_tip * k4_tip), q = sqrt(1 + s * s),
+        cz = k4_z(cx) - k4_rr * q, b = atan2(1, s), tx = cx + k4_rr * s / q)
+    concat([[R, 0]],
+           [for (i = [0 : k4_arc]) [cx + k4_rr * cos(b * i / k4_arc), cz + k4_rr * sin(b * i / k4_arc)]],
+           [for (i = [1 : k4_top]) let(r = tx * (1 - i / (k4_top + 1))) [r, k4_z(r)]]);
+k4_M = 1 + (k4_arc + 1) + k4_top;
+function k4_pts() = concat(
+    [for (j = [0 : k4_M - 1], i = [0 : k4_N - 1]) let(t = 360 * i / k4_N, pr = k4_prof(k4_R(t))[j],
+        r = pr[0] * (1 - k4_draft * pr[1] / k4_h)) [r * cos(t), r * sin(t), pr[1]]],
+    [[0, 0, 0], [0, 0, k4_h]]);
+module knob4_body() {
+    B = k4_M * k4_N; A = B + 1;
+    polyhedron(k4_pts(), concat(
+        [for (i = [0 : k4_N - 1]) [B, i, (i + 1) % k4_N]],
+        [for (j = [0 : k4_M - 2], i = [0 : k4_N - 1], tri = [0, 1]) let(a = j * k4_N + i, b = (j + 1) * k4_N + i,
+            c = (j + 1) * k4_N + (i + 1) % k4_N, d = j * k4_N + (i + 1) % k4_N) tri == 0 ? [a, b, c] : [a, c, d]],
+        [for (i = [0 : k4_N - 1]) [A, (k4_M - 1) * k4_N + (i + 1) % k4_N, (k4_M - 1) * k4_N + i]]), convexity = 4);
+}
+module knob4_print() difference() {
+    knob4_body();
+    translate([0, 0, -1]) cylinder(d = 5.5, h = 30, $fn = 24);
+    translate([0, 0, k4_floor]) difference() {
+        cylinder(d = kb_seat, h = 30, $fn = 48);
+        for (a = [0, 120, 240]) rotate(a) translate([kb_seat / 2 - kb_rib, -0.6, 0]) cube([1, 1.2, 30]);
+    }
+}
+module knob4() rotate([90, 0, 0]) knob4_print();   // as fitted: bearing face at y = 0, grip toward -y, like knob2
+
 // ---------------- 2026-11-19: 1010 uprights in place of the catches (Justin) ----------------
 // The knob's pull on a printed catch sat about 19 off the latch-side member's axis and twisted that
 // member (VHB on its back face only). Now a 1010 upright at each latch lies on the outer faces of
@@ -222,7 +274,7 @@ up_y     = [df_y[0] - ext, df_y[0]];   // on the frame's outer face
 up_hole  = 3.4;
 bolt_up  = 45;                         // knob thread with the uprights
 kn_y     = uprights ? up_y[0] : df_y[0] - ct_leg;   // knob face
-kn_l     = uprights ? bolt_up : bolt_l;
+kn_l     = uprights ? bolt_up - k4_floor : bolt_l;   // thread under the knob's face
 module upright() color([0.70, 0.71, 0.73]) difference() {
     translate([-ext / 2, up_y[0], up_z[0]]) cube([ext, ext, up_z[1] - up_z[0]]);
     hull() {   // U-slot open at the end, round end on the knob screw's axis (same as the catch's)
@@ -238,7 +290,7 @@ module bottom_latch(lx, sw = 0) {
     translate([lx, piv_y, piv_z]) rotate([sw, 0, 0]) translate([0, -piv_y, -piv_z]) {   // swings down
         color([0.72, 0.72, 0.75]) translate([-10, piv_y, piv_z]) rotate([0, 90, 0]) cylinder(d = 10, h = 20, $fn = 48);
         color("silver") translate([0, kn_y + kn_l, piv_z]) rotate([90, 0, 0]) cylinder(d = 5, h = kn_l, $fn = 24);
-        color([0.15, 0.15, 0.17]) translate([0, kn_y, piv_z]) knob2();
+        color([0.15, 0.15, 0.17]) translate([0, kn_y, piv_z]) if (uprights) knob4(); else knob2();
     }
 }
 
@@ -288,6 +340,8 @@ else if (part == "upright") upright();
 else if (part == "catch") catch_part();
 else if (part == "catch_print") translate([0, 0, ct_leg - df_y[0]]) rotate([90, 0, 0]) catch_part();   // as printed: knob face on the bed, U-slot vertical
 else if (part == "knob") knob2();
+else if (part == "knob_print") knob4_print();   // 2026-11-23: the 4-fin knob, bearing face on the bed, pocket opening up
+else if (part == "knob4") knob4();
 else if (part == "handle") translate([0, -df_y[0], 0]) handle();
 else { context(); door_mounts(swing); }
 
