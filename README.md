@@ -3,14 +3,15 @@
 A sealed, desiccant-dried filament box for a **Snapmaker U1**, built to fill the middle bay of the
 printer cart. Four spools spin on rollers and feed the U1's two feeders straight through the back
 wall, six more spools wait in dry storage, and a stainless pan of silica gel sits in a tunnel under
-the floor deck. No heater, no fan, no electronics: just a good seal and enough desiccant.
+the floor deck. No heater: just a good seal, enough desiccant, and a small USB fan to keep the air mixed.
 
 Laser-cut 6 mm cast acrylic, a 1010 aluminium extrusion door frame, and a handful of 3D-printed
 parts. Designed parametrically in OpenSCAD; every part was fit-tested on the printer before
 anything gets cut.
 
-> **Status (2026-11-22):** built and running. With the door shut the box holds 10 to 11 % RH at
-> 69 F (14 % on the reference hygrometer). The printed door catches are replaced by two 1010
+> **Status (2026-11-24):** built and running. With the door shut the box holds 10 to 11 % RH at
+> 69 F on the small hygrometers (13 to 14 % on the reference one), everywhere in the box, since a
+> USB mixing fan went in on 2026-11-18. The printed door catches are replaced by two 1010
 > uprights. Next: new feeder tubing, then the U1's feed length goes to 1450 (see the
 > [feed length guide](2026-11-22_feed_length.md)). The shell is dry-fitted, not yet cemented.
 >
@@ -19,11 +20,18 @@ anything gets cut.
 
 ![The finished box in the cart's middle bay under the U1](images/2026-11-15_photo_full_setup.jpg)
 
+*2026-11-14, the first night: six hours after sealing, still drying (19 to 35 %), no fan yet.*
+
 ## Built
 
 ![Door closed with the 1010 uprights: 10 to 11 % RH along the front, 14 % on the reference hygrometer](images/2026-11-22_photo_uprights.jpg)
 
-*2026-11-22: the door with its two 1010 uprights under the latch knobs.*
+*2026-11-22: the door latched on its two 1010 uprights with M5 x 45 screws, before their printed knobs.*
+
+| | |
+|---|---|
+| ![2026-11-19: all five small hygrometers at 10 to 11 %, reference at 14 %](images/2026-11-19_photo_10_percent.jpg) | ![2026-11-21: small hygrometers at 10 to 11 %, reference at 13 %](images/2026-11-21_photo_10_percent.jpg) |
+| 2026-11-19, a day after the fan went in: small hygrometers 10 to 11 %, reference 14 % | 2026-11-21: 10 to 11 %, reference 13 %; new uprights on, old catches not yet off |
 
 | | |
 |---|---|
@@ -31,8 +39,8 @@ anything gets cut.
 | Shell panels off the laser (film off, kerf 0.25) | Shell dry-fitted, door frame VHB-bonded to the door |
 | ![Bench test fit with spools and pan](images/2026-11-15_photo_bench_test_fit.jpg) | ![Silica gel under the perforated deck](images/2026-11-15_photo_desiccant.jpg) |
 | First test fit on the bench | Gel loaded under the deck; 43 to 44 % RH at seal-up |
-| ![Printed swing-bolt latch](images/2026-11-15_photo_latch.jpg) | ![Door closed, first week](images/2026-11-15_photo_door_closed.jpg) |
-| Printed swing-bolt latch (catch since replaced by an upright) | First week: spools, spares on the deck, pan in the tunnel |
+| ![Printed swing-bolt latch](images/2026-11-15_photo_latch.jpg) | ![Door closed, three hours after sealing](images/2026-11-15_photo_door_closed.jpg) |
+| Printed swing-bolt latch (catch since replaced by an upright) | 2026-11-14, three hours after sealing: 15 to 19 % by the pan, 30 to 34 % at the sides |
 
 Lessons from the build:
 - Kerf 0.25 was too tight for the long finger joints: the shell only closed with a mallet. Use
@@ -45,7 +53,9 @@ Lessons from the build:
 - The printed catches let the knob's pull twist the door frame's top rail. A 1010 upright from the
   bottom rail to each knob carries the pull to the hinge rail instead:
   [`2026-11-21_door_uprights.md`](2026-11-21_door_uprights.md).
-- With no fan, the air by the gel dries first; the rest of the box follows over a day or more.
+- With no fan, the air by the gel dries first. After four days the pan was at 10 % but the sides and
+  top were still at 15 to 17 %. With a small mixing fan, the whole box was at 10 to 13 % the next
+  morning.
 
 ## The design
 
@@ -83,8 +93,8 @@ reaches the spools through the deck holes and the vents along the tunnel walls.
 ### From the back
 
 The U1's two feeders hang on printed inserts in the top panel, with their outlets sealed through
-the back wall. A PG13.5 cable gland in the back panel stays closed on a rod stub, ready if a heater
-is ever needed. Two more spares tuck into the floor corners under the spinning spools.
+the back wall. The render shows a PG13.5 cable gland in the back panel; as built, a printed split
+gland takes its place and carries the mixing fan's USB cable. Two more spares tuck into the floor corners under the spinning spools.
 
 ![From the back](images/2026-11-11_readme_back.png)
 
@@ -133,13 +143,13 @@ acrylic, and every acrylic sheet's thickness was caliper-mapped (5.8 mm, not 6).
 
 **Bought:** 4 sheets of 24 x 36 in, 6 mm cast acrylic (3 for the shell, 1 for the inside), 1010
 extrusion and T-nuts, 8 mm steel rod, 608ZZ bearings, M3 / M5 hardware, 3M 4910 VHB, EVA foam tape,
-a PG13.5 gland, and an Elite Global Solutions SS6152 stainless pan. Full list in
+a 120 mm USB fan with a speed controller, and an Elite Global Solutions SS6152 stainless pan. Full list in
 [`2026-11-05_hardware_list.md`](2026-11-05_hardware_list.md).
 
 **Laser:** the shell is six finger-jointed panels nested on strips ripped from three sheets; the
 interior (tunnel, deck, holder plates) nests on the fourth. Film comes off before cutting.
 
-**Printed:** hinge loops and rings, latch saddles and barrels, the door handle, corner
+**Printed:** hinge loops and rings, latch saddles, barrels and knobs, the fan cable's split gland, the door handle, corner
 brackets (door frame only; the shell panels screw straight to the shell frame),
 feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
 with the count per box.
@@ -156,7 +166,7 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-10-30_dry_box_sheets.scad`](scad/2026-10-30_dry_box_sheets.scad) | Shell panels nested on the ripped strips |
 | [`2026-11-05_interior.scad`](scad/2026-11-05_interior.scad) | Tunnel, deck and holder plates nested on the interior sheet; feeder gaskets |
 | [`2026-11-04_spool_holder.scad`](scad/2026-11-04_spool_holder.scad) | Spool holders, rollers, washers, rod end caps |
-| [`2026-11-04_door_mounts.scad`](scad/2026-11-04_door_mounts.scad) | Hinge loop, seal adjusters, ring, bar and caps; door catch; handle |
+| [`2026-11-04_door_mounts.scad`](scad/2026-11-04_door_mounts.scad) | Hinge loop, seal adjusters, ring, bar and caps; door uprights and 4-fin knob (and the old catch); handle |
 | [`2026-11-03_swing_latch.scad`](scad/2026-11-03_swing_latch.scad) | Latch saddle and barrel |
 | [`2026-11-02_feeder_insert.scad`](scad/2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
 | [`2026-10-31_dry_box_bracket.scad`](scad/2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
