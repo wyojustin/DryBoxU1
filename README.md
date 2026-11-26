@@ -69,6 +69,31 @@ the stacked spares, `govee` the reference. The small ones read about 4 below the
 slowly: the last reading still had it at 17 %, under three hours after the reel swap. Times are when each reading
 was reported.
 
+## Covers for the empty feeder openings
+
+With both feeders in the box, the U1's side panels are left with open windows and a cable slot, and
+the extension board for each feeder cable hangs outside. A printed cover hooks into each panel's four
+windows and slides back toward the printer's rear until its sloped lips wedge tight: no latch, no
+screws. Inside is room for the adapter board (30 x 28 x 6) and its cable, and the ribbon leaves
+through an opening at the rear and wraps the corner. One body fits both sides, turned 180; only the
+WyoLum butterfly on the face turns with it. Derived from kilozebra's
+[feeder blank plate](https://www.printables.com/model/1618102-snapmaker-u1-wire-shelf-filament-feeder-relocation),
+CC BY 4.0 (see [License](#license)).
+
+| | |
+|---|---|
+| ![Cover with the butterfly on the U1's right side panel, ribbon cable out the rear](images/2026-11-25_photo_feeder_cover_on.jpg) | ![The left and right covers, two-colour butterfly inlay](images/2026-11-25_photo_feeder_covers.jpg) |
+| 2026-11-25: on the right side, the ribbon out the rear and round the corner | The pair: same body, butterfly turned for each side |
+
+*Covers derived from kilozebra's feeder blank plate
+([Printables](https://www.printables.com/model/1618102-snapmaker-u1-wire-shelf-filament-feeder-relocation),
+CC BY 4.0).*
+
+To fit: hook all four into the windows about 4 mm forward of the final spot, then slide toward the
+rear until snug. To remove, slide forward and lift off. Print face down, supports under the four hook
+lips only, 5 walls and 100 % infill so the hooks are solid. For the butterfly, load a side's body and
+`_butterfly` STL together as one object with two parts and give the butterfly its own colour.
+
 ## The design
 
 ![The dry box in the cart's middle bay, door closed (render)](images/2026-11-11_readme_closed.png)
@@ -163,7 +188,7 @@ interior (tunnel, deck, holder plates) nests on the fourth. Film comes off befor
 
 **Printed:** hinge loops and rings, latch saddles, barrels and knobs, the fan cable's split gland, the door handle, corner
 brackets (door frame only; the shell panels screw straight to the shell frame),
-feeder inserts, rollers, washers and end caps. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
+feeder inserts, rollers, washers and end caps, and the two covers for the printer's empty feeder openings. STLs in [`stl/`](stl/), named `<part>_qty=<n>.stl`
 with the count per box.
 
 ## Files
@@ -181,6 +206,8 @@ each `.scad` file's header says what it is and which `part` / `view` options it 
 | [`2026-11-04_door_mounts.scad`](scad/2026-11-04_door_mounts.scad) | Hinge loop, seal adjusters, ring, bar and caps; door uprights and 4-fin knob (and the old catch); handle |
 | [`2026-11-03_swing_latch.scad`](scad/2026-11-03_swing_latch.scad) | Latch saddle and barrel |
 | [`2026-11-02_feeder_insert.scad`](scad/2026-11-02_feeder_insert.scad) | Feeder insert v11 (released) |
+| [`2026-11-25_feeder_blank_cover.scad`](scad/2026-11-25_feeder_blank_cover.scad) | Covers for the U1's empty feeder openings, room for the cable's adapter board (from kilozebra's plate, CC BY 4.0) |
+| [`2026-11-25_wyolum_butterfly.scad`](scad/2026-11-25_wyolum_butterfly.scad) | The WyoLum butterfly outline, for the covers' face |
 | [`2026-10-31_dry_box_bracket.scad`](scad/2026-10-31_dry_box_bracket.scad) | 1010 corner bracket |
 | [`2026-11-11_tunnel_jig.scad`](scad/2026-11-11_tunnel_jig.scad) | Printed jig that holds the tunnel walls square while the cement cures |
 | [`2026-11-14_collet_tool.scad`](scad/2026-11-14_collet_tool.scad) | Acrylic pusher that rides on the feeder tubes and presses both collet releases |
@@ -220,3 +247,11 @@ A commercial four-spool dryer exists for about $279. But builders gotta build.
 
 [MIT](LICENSE), for everything in this repo: the OpenSCAD sources, STLs, laser files, guides, pictures
 and the feed length page. Build it, change it, share it, sell it; just keep the copyright notice.
+
+One exception carries an extra credit: the side covers for the empty feeder openings
+([`scad/2026-11-25_feeder_blank_cover.scad`](scad/2026-11-25_feeder_blank_cover.scad) and the
+`stl/feeder_cover_*` files) are derived from the feeder blank plate in
+["Snapmaker U1 wire shelf filament feeder relocation"](https://www.printables.com/model/1618102-snapmaker-u1-wire-shelf-filament-feeder-relocation)
+by kilozebra, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Keep that credit
+with them, and with any picture of them (the two 2026-11-25 cover photos in `images/`). Changes: hollowed out for the adapter board and cable, hooks
+narrowed and thickened, lips that wedge in place of the latch tab, angular sides, the WyoLum butterfly.
