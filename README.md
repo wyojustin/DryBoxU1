@@ -78,7 +78,8 @@ screws. Inside is room for the adapter board (30 x 28 x 6) and its cable, and th
 through an opening at the rear and wraps the corner. One body fits both sides, turned 180; only the
 WyoLum butterfly on the face turns with it. Derived from kilozebra's
 [feeder blank plate](https://www.printables.com/model/1618102-snapmaker-u1-wire-shelf-filament-feeder-relocation),
-CC BY 4.0 (see [License](#license)).
+CC BY 4.0 (see [License](#license)). Also on Printables:
+[Rebanded covers](https://www.printables.com/model/1929732-rebanded-covers).
 
 | | |
 |---|---|
