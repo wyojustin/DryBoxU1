@@ -18,15 +18,20 @@ anything gets cut.
 > First sealed 2026-11-14 with the gel loaded: overnight the air by the pan fell from 44 % to 18 %,
 > the rest of the box to 30 %.
 
-![The finished box in the cart's middle bay under the U1](images/2026-11-15_photo_full_setup.jpg)
+![The finished box in the cart's middle bay under the U1, butterfly feeder covers on the printer's sides](images/2026-11-25_photo_full_setup.jpg)
 
-*2026-11-14, the first night: six hours after sealing, still drying (19 to 35 %), no fan yet.*
+*2026-11-25: the U1 printing on top, four spools feeding and two more in storage. 10 % RH at 68 F
+on the small hygrometers (one at 13 %), 16 % on the reference.*
 
 ## Built
 
 ![Door closed with the 1010 uprights: 10 to 11 % RH along the front, 14 % on the reference hygrometer](images/2026-11-22_photo_uprights.jpg)
 
 *2026-11-22: the door latched on its two 1010 uprights with M5 x 45 screws, before their printed knobs.*
+
+![The box on its first night in the cart's middle bay](images/2026-11-15_photo_full_setup.jpg)
+
+*2026-11-14, the first night: six hours after sealing, still drying (19 to 35 %), no fan yet.*
 
 | | |
 |---|---|
