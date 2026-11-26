@@ -29,10 +29,6 @@ on the small hygrometers (one at 13 %), 16 % on the reference.*
 
 *2026-11-22: the door latched on its two 1010 uprights with M5 x 45 screws, before their printed knobs.*
 
-![The box on its first night in the cart's middle bay](images/2026-11-15_photo_full_setup.jpg)
-
-*2026-11-14, the first night: six hours after sealing, still drying (19 to 35 %), no fan yet.*
-
 | | |
 |---|---|
 | ![2026-11-19: all five small hygrometers at 10 to 11 %, reference at 14 %](images/2026-11-19_photo_10_percent.jpg) | ![2026-11-21: small hygrometers at 10 to 11 %, reference at 13 %](images/2026-11-21_photo_10_percent.jpg) |
